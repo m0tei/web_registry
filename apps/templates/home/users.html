@@ -1,0 +1,162 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<section class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <!-- [ breadcrumb ] start -->
+                <div class="page-header">
+                    <div class="page-block">
+                        <div class="row align-items-center">
+                            <div class="col-md-12">
+                                <div class="page-header-title">
+                                    <h5 class="m-b-10">Users Dashboard Edit/Create</h5>
+                                </div>
+                                <ul class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                    <li class="breadcrumb-item"><a href="javascript:">Users Dashboard</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- [ breadcrumb ] end -->
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ Hover-table ] start -->
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Users</h5>
+                                        <span class="d-block m-t-5">Aici poti sa creezi <code>useri</code> si sa le
+                                            atribui roluri</span>
+                                    </div>
+                                    <div class="card-block table-border-style">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Numele</th>
+                                                        <th>Email</th>
+                                                        <th>Role</th>
+                                                        <th>Delete</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="table_body">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Hover-table ] end -->
+                        </div>
+
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Add User</h5>
+                                    <span class="d-block m-t-5">Creaza un <code>user</code> nou</span>
+                                </div>
+                                <div class="card-body">
+                                    <form id="createUser_form">
+                                        <div class=" form-group">
+                                            <label for="createUser_nume_label">Nume</label>
+                                            <input type="text" class="form-control" name="name" placeholder="Nume">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="createUser_email_label">Email address</label>
+                                            <input type="email" class="form-control" name="email" placeholder="Email">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="createUser_password_label">Password</label>
+                                            <input type="password" class="form-control" name="password"
+                                                placeholder="Password">
+                                        </div>
+                                        <div class="form-group form-check">
+                                            <input type="checkbox" class="form-check-input" name="admin">
+                                            <label class="form-check-label" for="exampleCheck1">Va fi acest user
+                                                admin?</label>
+                                        </div>
+                                        <div class="error error--hidden"></div>
+                                        <input type="submit" value="Crează" class="btn btn-primary">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+    async function populateUsers() {
+        try {
+            const table = document.getElementById("table_body");
+            const response = await fetch("/api/users/show");
+            const jsonData = await response.json();
+
+            jsonData.forEach((item) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `<td>${item.name}</td><td>${item.email}</td><td>${item.role}</td><td><button class="btn btn-secondary" onclick="deleteUser('${item._id}')"><i class="feather icon-trash"></i></button></td>`;
+                table.appendChild(row);
+            });
+        } catch (error) {
+            console.error("Error fetching table contents:", error);
+        }
+    }
+
+    async function deleteUser(id) {
+        const response = await fetch('/api/users/delete/' + id)
+        if(response.ok)
+            location.reload()
+    }
+
+    document.getElementById('createUser_form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission
+        // Serialize form data
+        var formData = new FormData(this);
+
+        // Send form data via AJAX
+        fetch('/register', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Redirect to the success page after a successful submission
+                    window.location.href = '/users';
+                } else {
+                    // Handle errors here if needed
+                    console.error('Form submission failed:', response.status);
+                    $error.text(resp.responseJSON.error).removeClass("error--hidden");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+    populateUsers();
+</script>
+{% endblock javascripts %}

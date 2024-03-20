@@ -1,0 +1,101 @@
+{% extends "layouts/base.html" %} {% block title %} Registru Web | T. Popoviciu
+{% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+  <div class="pcoded-wrapper">
+    <div class="pcoded-content">
+      <div class="pcoded-inner-content">
+        <!-- [ breadcrumb ] start -->
+
+        <!-- [ breadcrumb ] end -->
+        <div class="main-body">
+          <div class="page-wrapper">
+            <!-- [ Main Content ] start -->
+            <div class="row">
+              <div class="col-xl-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>Registru intrari/iesiri</h5>
+                    <span class="d-block m-t-5">Creaza, Sterge sau Editeaza orice intrare in
+                      registru</span>
+                    <div style="padding-top: 7px"></div>
+                    <a href="/add"><button class="btn btn-primary" href="/add.html">
+                      Adauga 
+                    </button></a>
+                  </div>
+                  <div class="card-block table-border-style">
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Data inregistrarii</th>
+                            <th>Nr. si data documentului</th>
+                            <th>De unde povine documentul</th>
+                            <th>Continutul documentului</th>
+                            <th>Repartizare</th>
+                            <th>Data Expedierii</th>
+                            <th>Destinatar</th>
+                            <th>Nr. de inreg. conex. doc. indc. dos.</th>
+                            <th>Delete</th>
+                          </tr>
+                        </thead>
+                        <tbody id="registry_table">
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- [ Main Content ] end -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  async function deleteRow(id) {
+    try {
+      const path = "/api/table/del/" + id;
+      const response = await fetch(path)
+
+      if (response.status == 200){
+        location.reload(true);
+      }
+    }
+    catch (error) {
+      console.error("Erorr deleting row: ", error);
+    }
+  }
+
+  async function populateTable() {
+    try {
+      const table = document.getElementById("registry_table");
+      const response = await fetch("/api/table/show");
+      const jsonData = await response.json();
+
+      jsonData.forEach((item) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${item._id}</td><td>${item.data_inregistrarii}</td><td>${item.nr_si_data_documentului}</td><td>${item.de_unde_provine_documentul}</td><td>${item.continutul_documentului}</td><td>${item.repartizare}</td><td>${item.data_expedierii}</td><td>${item.destinatar}</td><td>${item.nr_de_inregistrare_conex_doc_indic_dos}</td> <td><button class="btn btn-secondary" onclick="deleteRow('${item._id}')"><i class="feather icon-trash"></i></button></td>`;
+        table.appendChild(row);
+      });
+    } catch (error) {
+      console.error("Error fetching table contents:", error);
+    }
+  }
+
+  populateTable();
+</script>
+{% endblock javascripts %}

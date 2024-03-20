@@ -1,0 +1,128 @@
+{% extends "layouts/base-fullscreen.html" %}
+
+{% block title %} Adauga in registru {% endblock %}
+
+{% block content %}
+
+<div class="auth-wrapper">
+    <div class="auth-content">
+        <div class="auth-bg">
+            <span class="r"></span>
+            <span class="r s"></span>
+            <span class="r s"></span>
+            <span class="r"></span>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h5>Adauga o intrare in registru</h5>
+            </div>
+            <div class="card-body">
+                <h6>Ultimul numar din registru: </h6>
+                <label id="reg_id"></label>
+                <form id="form_add">
+                    <div class="form-group">
+                        <label for="name">Nr. de inregistrare (optional)</label>
+                        <input type="number" name="id" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Data</label>
+                        <input type="date" name="data" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Nr. și data documentului</label>
+                        <input type="text" name="nr_si_data" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">De unde provine documentul</label>
+                        <input type="text" name="provine_doc" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Continut pe scurt al documentului</label>
+                        <input type="text" name="cont_scurt" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Compartimentul căruia i s-a repartizat documentul si
+                            semnătura de primire</label>
+                        <input type="text" name="comp_repartizat" class="form-control">
+                    </div>
+
+                    <div>
+                        <label for="name">Data expedierii</label>
+                        <input type="date" name="data_expedierii" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Destinatar</label>
+                        <input type="text" name="destinatar" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Nr. de inregistrare la care se conex. doc. si indic.
+                            dos.</label>
+                        <input type="text" name="nr_inregistrare" class="form-control">
+                    </div>
+                    <div class="error error--hidden"></div>
+
+                    <input type="submit" value="Crează" class="btn btn-primary">
+
+                    <a href="{{ url_for('authentication_blueprint.logout') }}" class="nav-link">
+                    <button class="btn btn-secondary"><i class="feather icon-power"></i> Logout</buttno>
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('form_add').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Serialize form data
+        var formData = new FormData(this);
+
+        // Send form data via AJAX
+        fetch('/api/entry/add', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Redirect to the success page after a successful submission
+                    window.location.href = '/user';
+                } else {
+                    // Handle errors here if needed
+                    console.error('Form submission failed:', response.status);
+                    $error.text(resp.responseJSON.error).removeClass("error--hidden");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+
+    fetch('/api/table/last')
+        .then(response => {
+            // Check if the response is OK (status 200)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Once JSON data is fetched, do something with it
+            console.log(data)
+            const lastElementId = document.getElementById('reg_id');
+            lastElementId.textContent = data;
+        })
+        .catch(error => {
+            console.error('There was a problem with your fetch operation:', error);
+        });
+</script>
+
+{% endblock content %}

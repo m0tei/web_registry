@@ -1,0 +1,39 @@
+version: '3'
+services:
+  web_app:
+    container_name: web_app
+    restart: always
+    build: .
+    networks:
+      - db_network
+    ports:
+      - '5000:5000'
+    environment:
+      - MONGO_DB_HOST = 'mongo'
+    volumes:
+      - type: volume
+        source: app_data
+        target: /app
+  
+  mongo:
+    image: mongodb/mongodb-community-server:latest
+    container_name: mongo
+    restart: always
+    networks:
+      - db_network
+    ports:
+      - '27017:27017'
+    volumes:
+      - type: volume
+        source: db_data
+        target: /data/db
+
+volumes:
+  db_data:
+    driver: local
+  app_data:
+    driver: local
+
+networks:
+  db_network:
+    name: db_network

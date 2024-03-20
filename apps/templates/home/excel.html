@@ -1,0 +1,108 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Export Excel {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<section class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <!-- [ breadcrumb ] start -->
+                <div class="page-header">
+                    <div class="page-block">
+                        <div class="row align-items-center">
+                            <div class="col-md-12">
+                                <div class="page-header-title">
+                                    <h5 class="m-b-10">Descarca</h5>
+                                </div>
+                                <ul class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                    <li class="breadcrumb-item"><a href="javascript:">Descarca Excel</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- [ breadcrumb ] end -->
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ Hover-table ] start -->
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Descarca registru in Excel</h5>
+                                        <span class="d-block m-t-5">De aici poti sa downloadezi <code>registrul</code>
+                                            in format .xlsx</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6>Selecteaza anul pe care vrei sa-l descarci:</h6>
+                                        <select id="year_select" class="mb-3 form-control form-control-lg">
+                                        </select>
+                                        <div style="padding-top: 2px;"></div>
+                                        <button id="btn_download" type="btn_download" class="btn btn-primary">Download</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Hover-table ] end -->
+                        </div>
+
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+    async function populateSelect() {
+        try {
+            const response = await fetch('/api/table/collections');
+            const jsonData = await response.json();
+            var selectElement = document.getElementById("year_select");
+
+            // Iterate through the JSON data and create option elements
+            jsonData.forEach(function (option) {
+                var optionElement = document.createElement("option");
+                optionElement.value = option;
+                optionElement.text = option;
+                selectElement.appendChild(optionElement);
+            });
+        } catch (error) {
+            console.error('Error fetching collections:', error);
+        }
+    }
+
+    document.getElementById("btn_download").addEventListener("click", function () {
+        var selectedOption = document.getElementById("year_select").value;
+        var errorMessageElement = document.getElementById('error-message');
+        $.ajax({
+            type: "GET",
+            url: "/api/table/verif",
+            data: { "selectedOption": selectedOption },
+            contentType: "application/json;charset=UTF-8",
+            success: function (response) {
+                window.location.href = "/api/table/download/" + selectedOption;
+            },
+            error: function (resp) {
+                errorMessageElement.textContent = "Table not found";
+            }
+        });
+    });
+    populateSelect();
+</script>
+{% endblock javascripts %}
