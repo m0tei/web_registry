@@ -34,20 +34,19 @@ def login():
 
         # Locate user
         user_db = db.users.find_one({'email':email})
-        if user_db is  not None:
-            user_data={
-                "_id": user_db['_id'],
-                "name": user_db['name'],
-                "email": user_db['email'],
-                "password": user_db['password'],
-                "role": user_db['role']
-            }
-            user=User(user_data)
-
-        if not user:
+        if user_db is None:
             return render_template( 'accounts/login.html',
                                 msg='Unknown User or Email',
                                 form=login_form)
+        
+        user_data={
+            "_id": user_db['_id'],
+            "name": user_db['name'],
+            "email": user_db['email'],
+            "password": user_db['password'],
+            "role": user_db['role']
+        }
+        user=User(user_data)
 
         # Check the password
         if verify_pass(password, user.get_pass()):
