@@ -79,7 +79,7 @@ def add():
     else:
         last_id = int(id_entry)
 
-    # if(year_selected.find_one({"id":last_id})):
+    #if(year_selected.find_one({"id":last_id})):
     #  update_entry()
     #  return
 

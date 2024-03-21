@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="838fe916-c001-4109-ae05-16d4456e7d7e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.dockerignore" beforeDir="false" afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/authentication/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/authentication/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/authentication/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/authentication/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/authentication/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/authentication/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/authentication/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/authentication/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/authentication/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/authentication/util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/home/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/home/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/home/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/home/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/home/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/home/util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/css/dark.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/css/dark.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/fonts/datta/datta-icon.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/fonts/datta/datta-icon.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/fonts/datta/fonts/pct.svg" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/fonts/datta/fonts/pct.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/fonts/feather/css/feather.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/fonts/feather/css/feather.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/fonts/feather/fonts/feather.svg" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/fonts/feather/fonts/feather.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/fonts/fontawesome/css/fontawesome-all.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/fonts/fontawesome/css/fontawesome-all.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/fonts/fontawesome/webfonts/fa-brands-400.svg" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/fonts/fontawesome/webfonts/fa-brands-400.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/fonts/fontawesome/webfonts/fa-regular-400.svg" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/fonts/fontawesome/webfonts/fa-regular-400.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/fonts/fontawesome/webfonts/fa-solid-900.svg" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/fonts/fontawesome/webfonts/fa-solid-900.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/js/dark-mode.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/js/dark-mode.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/js/pages/chart-morris-custom.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/js/pages/chart-morris-custom.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/js/pages/google-maps.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/js/pages/google-maps.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/js/pcoded.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/js/pcoded.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/js/vendor-all.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/js/vendor-all.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/amchart/js/amcharts.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/amchart/js/amcharts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/amchart/js/gauge.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/amchart/js/gauge.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/amchart/js/images/dragIconRoundBig.svg" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/amchart/js/images/dragIconRoundBig.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/amchart/js/images/lens.svg" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/amchart/js/images/lens.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/amchart/js/light.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/amchart/js/light.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/amchart/js/serial.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/amchart/js/serial.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/amchart/js/usaLow.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/amchart/js/usaLow.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/animation/css/animate.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/animation/css/animate.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/bootstrap/css/bootstrap.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/bootstrap/css/bootstrap.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/bootstrap/css/bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/bootstrap/css/bootstrap.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/bootstrap/js/bootstrap.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/bootstrap/js/bootstrap.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/bootstrap/js/bootstrap.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/bootstrap/js/bootstrap.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/bootstrap/js/popover.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/bootstrap/js/popover.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/chart-morris/css/morris.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/chart-morris/css/morris.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/chart-morris/js/morris.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/chart-morris/js/morris.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/google-maps/js/gmaps.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/google-maps/js/gmaps.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/jquery-scrollbar/css/jquery.scrollbar.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/jquery-scrollbar/css/jquery.scrollbar.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/jquery-ui/js/jquery-ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/jquery-ui/js/jquery-ui.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/plugins/jquery/js/jquery.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/plugins/jquery/js/jquery.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/scss/dark.scss" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/scss/dark.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/accounts/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/accounts/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/excel.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/excel.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/form_elements.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/form_elements.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/page-403.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/page-403.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/page-404.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/page-404.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/page-500.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/page-500.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/page-blank.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/page-blank.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/user.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/user.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/users.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/users.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/includes/navigation.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/includes/navigation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/includes/scripts.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/includes/scripts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/includes/sidebar.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/includes/sidebar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/layouts/base-fullscreen.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/layouts/base-fullscreen.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/layouts/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/layouts/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gunicorn-cfg.py" beforeDir="false" afterPath="$PROJECT_DIR$/gunicorn-cfg.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nginx/appseed-app.conf" beforeDir="false" afterPath="$PROJECT_DIR$/nginx/appseed-app.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/render.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/render.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="2e08O28113Z4v98w0mUcsYDefeP" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/m0tei/Documents/code_files/WebRegistryApp"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration default="true" type="tests" factoryName="Autodetect">
+      <module name="WebRegistryApp" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-d68999036c7f-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.14475.56" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="838fe916-c001-4109-ae05-16d4456e7d7e" name="Changes" comment="" />
+      <created>1711030100096</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1711030100096</updated>
+    </task>
+    <servers />
+  </component>
+</project>
