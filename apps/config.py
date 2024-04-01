@@ -4,6 +4,8 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 import os, random, string
+import pymongo
+import os
 
 class Config(object):
 
@@ -82,12 +84,7 @@ config_dict = {
     'Debug'     : DebugConfig
 }
 
-
-import pymongo
-import os
-
 MONGO_DB_HOST = os.getenv("MONGO_DB_HOST", 'mongo')
-#MONGO_DB_PORT = int(os.getenv("MONGO_DB_PORT", 27017))
 
 client = pymongo.MongoClient(MONGO_DB_HOST,27017)
 db = client.databasePopoviciu
