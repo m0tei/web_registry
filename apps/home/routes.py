@@ -33,6 +33,12 @@ def edit(id):
         render_template('home/index.html', segment= 'index')
     return render_template('home/edit.html', entry=json.dumps(entry))
 
+@blueprint.route('/users/<name>')
+@login_required
+def users(name):
+    return render_template('home/userPage.html', user=name)
+
+
 
 @blueprint.route('/<template>')
 @login_required
@@ -89,10 +95,6 @@ def add():
     else:
         last_id = int(id_entry)
 
-    #if(year_selected.find_one({"id":last_id})):
-    #  update_entry()
-    #  return
-
     entry = {
         "_id": last_id,
         "user": session["_user_id"],
@@ -130,8 +132,7 @@ def GetTable():
     last_entries_list = []
     
     for entry in last_entries_cursor:
-        if "user" in entry:
-            entry["user"] = db.users.find_one({"_id": session["_user_id"]})["name"]
+        entry["user"] = db.users.find_one({"_id": entry["user"]})["name"]
         last_entries_list.append(entry)
 
     return jsonify(last_entries_list), 200
