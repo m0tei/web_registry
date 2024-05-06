@@ -17,12 +17,13 @@
                 <h5>Adauga o intrare in registru</h5>
             </div>
             <div class="card-body">
+                <input type="text" name="from" value="user" hidden>
                 <h6>Ultimul numar din registru: </h6>
                 <label id="reg_id"></label>
                 <form id="form_add">
-                    <div class="form-group">
+                    <div class="form-group" hidden>
                         <label for="name">Nr. de inregistrare (optional)</label>
-                        <input type="number" name="id" class="form-control">
+                        <input type="number" name="id" value="" class="form-control">
                     </div>
 
                     <div class="form-group">
@@ -66,7 +67,9 @@
                             dos.</label>
                         <input type="text" name="nr_inregistrare" class="form-control">
                     </div>
-                    <div class="error error--hidden"></div>
+                    <div id="error" class="alert alert-danger" role="alert" hidden>
+                        Exista deja o intrare cu acest numar de inregistrare!
+                    </div>
 
                     <div class="text-center">
                         <input type="submit" value="Crează" class="btn btn-primary">
@@ -100,11 +103,12 @@
                 } else {
                     // Handle errors here if needed
                     console.error('Form submission failed:', response.status);
-                    $error.text(resp.responseJSON.error).removeClass("error--hidden");
+                    document.getElementById("error").removeAttribute('hidden');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
+                document.getElementById("error").removeAttribute('hidden');
             });
     });
 

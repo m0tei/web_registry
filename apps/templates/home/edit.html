@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Adauga in regitru {% endblock %}
+{% block title %} Editeaza in regitru {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -19,11 +19,11 @@
                         <div class="row align-items-center">
                             <div class="col-md-12">
                                 <div class="page-header-title">
-                                    <h5 class="m-b-10">Adauga o intrare</h5>
+                                    <h5 class="m-b-10">Editeaza o intrare</h5>
                                 </div>
                                 <ul class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
-                                    <li class="breadcrumb-item"><a href="javascript:">Adauga</a></li>
+                                    <li class="breadcrumb-item"><a href="javascript:">Editeaza</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -37,64 +37,60 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>Adauga o intrare in registru</h5>
+                                        <h5>Editeaza o intrare in registru</h5>
                                     </div>
                                     <div class="card-body">
-                                        <h6>Ultimul numar din registru: </h6>
-                                        <label id="reg_id"></label>
                                         <form id="form_add">
-                                            <input type="text" name="from" value="user" hidden>
+                                            <input type="text" name="from" value="admin" hidden>
                                             <div class="form-group">
-                                                <label for="name">Nr. de inregistrare (optional)</label>
-                                                <input type="number" name="id" class="form-control">
+                                                <label for="name">Nr. de inregistrare</label>
+                                                <input type="number" id="nr_inreg" name="id" class="form-control" readonly>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="name">Data</label>
-                                                <input type="date" name="data" class="form-control" required>
+                                                <input type="date" id="data" name="data" class="form-control" required>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="name">Nr. și data documentului</label>
-                                                <input type="text" name="nr_si_data" class="form-control">
+                                                <input type="text" id="nr_si_data" name="nr_si_data" class="form-control">
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="name">De unde provine documentul</label>
-                                                <input type="text" name="provine_doc" class="form-control">
+                                                <input type="text" id="de_unde_prov" name="provine_doc" class="form-control">
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="name">Continut pe scurt al documentului</label>
-                                                <input type="text" name="cont_scurt" class="form-control">
+                                                <input type="text" id="cont_pe_scurt" name="cont_scurt" class="form-control">
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="name">Compartimentul căruia i s-a repartizat documentul si
                                                     semnătura de primire</label>
-                                                <input type="text" name="comp_repartizat" class="form-control">
+                                                <input type="text" id="comp_caruia" name="comp_repartizat" class="form-control">
                                             </div>
 
                                             <div>
                                                 <label for="name">Data expedierii</label>
-                                                <input type="date" name="data_expedierii" class="form-control" required>
+                                                <input type="date" id="data_expedierii" name="data_expedierii" class="form-control" required>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="name">Destinatar</label>
-                                                <input type="text" name="destinatar" class="form-control">
+                                                <input type="text" id="destinatar" name="destinatar" class="form-control">
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="name">Nr. de inregistrare la care se conex. doc. si indic.
                                                     dos.</label>
-                                                <input type="text" name="nr_inregistrare" class="form-control">
+                                                <input type="text" id="nr_inregistrare" name="nr_inregistrare" class="form-control">
                                             </div>
-                                            <div id="error" class="alert alert-danger" role="alert" hidden>
-                                                Exista deja o intrare cu acest numar de inregistrare!
-                                            </div>
+                                            <div class="error error--hidden"></div>
 
-                                            <input type="submit" value="Crează" class="btn btn-primary">
+                                            <input type="submit" value="Editează" class="btn btn-primary">
                                         </form>
                                     </div>
                                 </div>
@@ -116,6 +112,25 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
+    var entry = JSON.parse('{{ entry | safe }}');
+    function populateForm(){
+        try{
+            document.getElementById("nr_inreg").value = entry["_id"];
+            document.getElementById("data").value = entry["data_inregistrarii"];
+            document.getElementById("nr_si_data").value = entry["nr_si_data_documentului"];
+            document.getElementById("de_unde_prov").value = entry["de_unde_provine_documentul"];
+            document.getElementById("cont_pe_scurt").value = entry["continutul_documentului"];
+            document.getElementById("comp_caruia").value = entry["repartizare"];
+            document.getElementById("data_expedierii").value = entry["data_expedierii"];
+            document.getElementById("destinatar").value = entry["destinatar"];
+            document.getElementById("nr_inregistrare").value = entry["nr_de_inregistrare_conex_doc_indic_dos"];
+        }
+        catch(error){
+            console.error('There was a problem with the fetch operation:', error);
+        }
+    }
+
+
     document.getElementById('form_add').addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent the default form submission
 
@@ -134,31 +149,13 @@
                 } else {
                     // Handle errors here if needed
                     console.error('Form submission failed:', response.status);
-                    document.getElementById("error").removeAttribute('hidden');
+                    $error.text(resp.responseJSON.error).removeClass("error--hidden");
                 }
             })
             .catch(error => {
-                document.getElementById("error").removeAttribute('hidden');
                 console.error('Error:', error);
             });
     });
-
-    fetch('/api/table/last')
-            .then(response => {
-                // Check if the response is OK (status 200)
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                // Parse the JSON response
-                return response.json();
-            })
-            .then(data => {
-                // Once JSON data is fetched, do something with it
-                const lastElementId = document.getElementById('reg_id');
-                lastElementId.textContent = data;
-            })
-            .catch(error => {
-                console.error('There was a problem with your fetch operation:', error);
-            });
+    populateForm();
 </script>
 {% endblock javascripts %}

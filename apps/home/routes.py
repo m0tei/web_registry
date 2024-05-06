@@ -1,3 +1,4 @@
+import json
 import tempfile
 import uuid
 import openpyxl
@@ -22,6 +23,15 @@ def index():
 @login_required
 def user():
     return render_template('home/user.html', segment='user')
+
+@blueprint.route('/edit/<int:id>')
+@login_required
+def edit(id):
+    entry = this_year_db.find_one({"_id": id})
+    print("entry is: ", entry)
+    if entry is None:
+        render_template('home/index.html', segment= 'index')
+    return render_template('home/edit.html', entry=json.dumps(entry))
 
 
 @blueprint.route('/<template>')
@@ -97,10 +107,18 @@ def add():
         "nr_de_inregistrare_conex_doc_indic_dos": request.form.get('nr_inregistrare'),
     }
 
-    if (year_selected.insert_one(entry)):
-        return jsonify({"msg": "Entry added"}), 200
+    existing_entry = year_selected.find_one({"_id": last_id})
+    if existing_entry and request.form.get('from') == "admin":
+        # Update existing entry
+        year_selected.update_one({"_id": last_id}, {"$set": entry})
+        return jsonify({"msg": "Entry updated"}), 200
+    else:
+        if not existing_entry:
+        # Insert new entry
+            if year_selected.insert_one(entry):
+                return jsonify({"msg": "Entry added"}), 200
 
-    return jsonify({"error": "Entry allready exists!"}), 400
+    return jsonify({"error": "Already exists and you cannot edit it!"}), 400
 
 
 @blueprint.route('/api/table/show', methods=['GET'])
@@ -108,7 +126,13 @@ def add():
 def GetTable():
     last_entries_cursor = this_year_db.find().sort(
         [("_id", pymongo.DESCENDING)])
-    last_entries_list = list(last_entries_cursor)
+    
+    last_entries_list = []
+    
+    for entry in last_entries_cursor:
+        if "user" in entry:
+            entry["user"] = db.users.find_one({"_id": session["_user_id"]})["name"]
+        last_entries_list.append(entry)
 
     return jsonify(last_entries_list), 200
 
@@ -146,10 +170,10 @@ def DeleteRow(id):
 def collectionList():
     try:
         collections = db.list_collection_names()
-        if 'users' in collections:
-            collections.remove('users')
         if "delete_me" in collections:
             collections.remove("delete_me")
+        if "users" in collections:
+            collections.remove("users")
         return jsonify(collections)
     except Exception as e:
         return jsonify({"error": f"Error fetching collections: {e}"}),
@@ -210,6 +234,7 @@ def download(year):
 @login_required
 def getUsers():
     users = list(db.users.find({}, {'password': 0}))
+
     return users, 200
 
 
