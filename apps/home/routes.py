@@ -33,10 +33,15 @@ def edit(id):
         render_template('home/index.html', segment= 'index')
     return render_template('home/edit.html', entry=json.dumps(entry))
 
-@blueprint.route('/users/<name>')
+@blueprint.route('/users/<id>')
 @login_required
-def users(name):
-    return render_template('home/userPage.html', user=name)
+def users(id):
+    if db.users.find_one({"_id": id}):
+        user_data = db.users.find_one({"_id": id})
+    else:
+        user_data["name"] =  "user deleted!"
+        user_data["_id"] = "0"
+    return render_template('home/userPage.html', user=user_data)
 
 
 
@@ -132,7 +137,23 @@ def GetTable():
     last_entries_list = []
     
     for entry in last_entries_cursor:
-        entry["user"] = db.users.find_one({"_id": entry["user"]})["name"]
+        entry["user_id"]=entry["user"]
+        entry["user_name"] = db.users.find_one({"_id": entry["user"]})["name"]
+        last_entries_list.append(entry)
+
+    return jsonify(last_entries_list), 200
+
+@blueprint.route('/api/table/show/<id>', methods=['GET'])
+@login_required
+def GetTableUser(id):
+    last_entries_cursor = this_year_db.find({"user": id}).sort(
+        [("_id", pymongo.DESCENDING)])
+    
+    last_entries_list = []
+    
+    for entry in last_entries_cursor:
+        entry["user_id"]=entry["user"]
+        entry["user_name"] = db.users.find_one({"_id": entry["user"]})["name"]
         last_entries_list.append(entry)
 
     return jsonify(last_entries_list), 200
@@ -235,7 +256,6 @@ def download(year):
 @login_required
 def getUsers():
     users = list(db.users.find({}, {'password': 0}))
-
     return users, 200
 
 

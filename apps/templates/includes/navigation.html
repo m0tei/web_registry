@@ -3,9 +3,7 @@
     <div class="m-header">
         <a class="mobile-menu" id="mobile-collapse1" href="javascript:"><span></span></a>
         <a href="/" class="b-brand">
-            <div class="b-bg">
-                <i class="feather icon-file-text"></i>
-            </div>
+            <img src="https://i.ibb.co/drmhJZN/android-chrome-512x512.png" alt="logo image" border="0" width="40" height="40">
             <span class="b-title">Registru T. Popoviciu</span>
         </a>
     </div>
@@ -40,7 +38,7 @@
                             </a>
                         </div>
                         <ul class="pro-body">
-                            <li><a href="/profile.html" class="dropdown-item"><i class="feather icon-user"></i>
+                            <li><a href="/users/{{ current_user._id }}" class="dropdown-item"><i class="feather icon-user"></i>
                                 Profile</a></li>
                             <li><a href="{{ url_for('authentication_blueprint.logout') }}" class="dropdown-item">
                                 <i class="feather icon-lock"></i> Logout</a>

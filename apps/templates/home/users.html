@@ -118,7 +118,7 @@
 
             jsonData.forEach((item) => {
                 const row = document.createElement("tr");
-                row.innerHTML = `<td>${item.name}</td><td>${item.email}</td><td>${item.role}</td><td><button class="btn btn-danger" onclick="deleteUser('${item._id}')"><i class="feather icon-trash"></i></button></td>`;
+                row.innerHTML = `<td><a href="/users/${item._id}">${item.name}</a></td><td>${item.email}</td><td>${item.role}</td><td><button class="btn btn-danger" onclick="deleteUser('${item._id}')">delete <i class="feather icon-trash"></i></button></td>`;
                 table.appendChild(row);
             });
         } catch (error) {

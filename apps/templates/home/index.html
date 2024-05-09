@@ -67,6 +67,8 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
+
+  //delete function
   async function deleteRow(id) {
     try {
       const path = "/api/table/del/" + id;
@@ -81,6 +83,7 @@
     }
   }
 
+  //update table function
   async function populateTable() {
     try {
       const table = document.getElementById("registry_table");
@@ -100,7 +103,7 @@
                         <td>${item.data_expedierii}</td>
                         <td>${item.destinatar}</td>
                         <td>${item.nr_de_inregistrare_conex_doc_indic_dos}</td>
-                        <th><a href="/users/${item.user}"><button class="btn btn-outline-secondary">${item.user}</button></a></td>
+                        <th><a href="/users/${item.user_id}"><button class="btn btn-outline-secondary">${item.user_name}</button></a></td>
                         <td><button class="btn btn-danger" onclick="deleteRow('${item._id}')">delete <i class="far fa-trash-alt"></i></button> 
                           <a href="/edit/${item._id}"><button class="btn btn-outline-secondary">edit <i class="feather icon-edit"></i></button></a></td>`;
         table.appendChild(row);
@@ -111,6 +114,6 @@
   }
 
   populateTable();
-  setInterval(populateTable, 5000); 
+  //setInterval(populateTable, 5000); 
 </script>
 {% endblock javascripts %}

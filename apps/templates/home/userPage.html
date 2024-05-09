@@ -19,11 +19,12 @@
                         <div class="row align-items-center">
                             <div class="col-md-12">
                                 <div class="page-header-title">
-                                    <h5 class="m-b-10">{{user}}</h5>
+                                    <h5 class="m-b-10">{{user["name"]}}</h5>
                                 </div>
                                 <ul class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
                                     <li class="breadcrumb-item"><a href="/">users</a></li>
+                                    <li class="breadcrumb-item"><a href="/">{{user["name"]}}</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -34,17 +35,76 @@
                     <div class="page-wrapper">
                         <!-- [ Main Content ] start -->
                         <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Informatii despre utilizator</h5>
+                                    </div>
+                                    <div class="card-block">
+                                        <div class="row">
+                                            <div class="col-sm-6 mb-4">
+                                                <div class="form-group">
+                                                    <label for="exampleInputUsername">Username</label>
+                                                    <input class="form-control" id="exampleInputUsername" readonly 
+                                                           value="{{ current_user.username }}"
+                                                           aria-describedby="userHelp" placeholder="Enter email">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 mb-4">
+                                                <div class="form-group">
+                                                    <label {% if not current_user.email %} class="text-danger" {% endif %} 
+                                                           for="exampleInputEmail1">Email address</label>
+                                                    <input type="email"
+                                                           {% if current_user.email %} readonly value="{{ current_user.email }}" {% endif %}  
+                                                           class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                                                    {% if not current_user.email %}       
+                                                        <small id="emailHelp" class="form-text text-danger">
+                                                            You don't have an email address associated with this account.
+                                                        </small>
+                                                    {% endif %}    
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 mb-4"> 
+                                                <label class="mt-3 ml-3">Role</label>   
+                                                <button class="btn btn-outline-secondary">{{current_user.role}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <!-- [ Hover-table ] start -->
                             <div class="col-xl-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>Istoric</h5>
-                                        <span class="d-block m-t-5">Aici poti sa vezi acitunile lui <code>{{user}}</code></span>
+                                      <h5>Istoric</h5>
+                                      <span class="d-block m-t-5">Aici poti sa vezi istoricul lui <code>{{user["name"]}}</code></span>
+                                      <div style="padding-top: 7px"></div>
                                     </div>
-                                    <div class="card-body">
-                                        
+                                    <div class="card-block table-border-style">
+                                      <div class="table-responsive">
+                                        <table class="table table-hover">
+                                          <thead>
+                                            <tr>
+                                              <th>#</th>
+                                              <th>Data inregistrarii</th>
+                                              <th>Nr. si data documentului</th>
+                                              <th>De unde povine documentul</th>
+                                              <th>Continutul documentului</th>
+                                              <th>Repartizare</th>
+                                              <th>Data Expedierii</th>
+                                              <th>Destinatar</th>
+                                              <th>Nr. de inreg. conex. doc. indc. dos.</th>
+                                              <th>Delete</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody id="registry_table">
+                                          </tbody>
+                                        </table>
+                                      </div>
                                     </div>
-                                </div>
                             </div>
                             <!-- [ Hover-table ] end -->
                         </div>
@@ -63,6 +123,34 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
+  async function populateTable() {
+    try {
+      const table = document.getElementById("registry_table");
+      const response = await fetch("/api/table/show/"+"{{user['_id']}}");
+      const jsonData = await response.json();
 
+      table.innerHTML = '';
+
+      jsonData.forEach((item) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${item._id}</td>
+                        <td>${item.data_inregistrarii}</td>
+                        <td>${item.nr_si_data_documentului}</td>
+                        <td>${item.de_unde_provine_documentul}</td>
+                        <td>${item.continutul_documentului}</td>
+                        <td>${item.repartizare}</td>
+                        <td>${item.data_expedierii}</td>
+                        <td>${item.destinatar}</td>
+                        <td>${item.nr_de_inregistrare_conex_doc_indic_dos}</td>
+                        <td><button class="btn btn-danger" onclick="deleteRow('${item._id}')">delete <i class="far fa-trash-alt"></i></button> 
+                          <a href="/edit/${item._id}"><button class="btn btn-outline-secondary">edit <i class="feather icon-edit"></i></button></a></td>`;
+        table.appendChild(row);
+      });
+    } catch (error) {
+      console.error("Error fetching table contents:", error);
+    }
+  }
+
+  populateTable();
 </script>
 {% endblock javascripts %}
