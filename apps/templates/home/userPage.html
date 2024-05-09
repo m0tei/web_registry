@@ -34,15 +34,17 @@
                 <div class="main-body">
                     <div class="page-wrapper">
                         <!-- [ Main Content ] start -->
+
+
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="card">
                                     <div class="card-header">
                                         <h5>Informatii despre utilizator</h5>
                                     </div>
-                                    <div class="card-block">
+                                    <div class="card-body">
                                         <div class="row">
-                                            <div class="col-sm-6 mb-4">
+                                            <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <label for="exampleInputUsername">Username</label>
                                                     <input class="form-control" id="exampleInputUsername" readonly 
@@ -50,7 +52,7 @@
                                                            aria-describedby="userHelp" placeholder="Enter email">
                                                 </div>
                                             </div>
-                                            <div class="col-sm-6 mb-4">
+                                            <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <label {% if not current_user.email %} class="text-danger" {% endif %} 
                                                            for="exampleInputEmail1">Email address</label>
@@ -65,16 +67,14 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 mb-4"> 
-                                                <label class="mt-3 ml-3">Role</label>   
+                                                <label>Role:  </label>   
                                                 <button class="btn btn-outline-secondary">{{current_user.role}}</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
                             <!-- [ Hover-table ] start -->
                             <div class="col-xl-12">
                                 <div class="card">
