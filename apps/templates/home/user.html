@@ -17,18 +17,15 @@
                 <h5>Adauga o intrare in registru</h5>
             </div>
             <div class="card-body">
-                <input type="text" name="from" value="user" hidden>
-                <h6>Ultimul numar din registru: </h6>
-                <label id="reg_id"></label>
                 <form id="form_add">
-                    <div class="form-group" hidden>
-                        <label for="name">Nr. de inregistrare (optional)</label>
-                        <input type="number" name="id" value="" class="form-control">
+                    <input type="text" name="from" value="user" hidden>
+                    <div class="form-group">
+                        <label for="name">Nr. de inregistrare</label>
+                        <input type="number" id="id" name="not_id" class="form-control" readonly>
                     </div>
-
                     <div class="form-group">
                         <label for="name">Data</label>
-                        <input type="date" name="data" class="form-control" required>
+                        <input type="date" id ="date_input_1" name="data" class="form-control" required>
                     </div>
 
                     <div class="form-group">
@@ -54,7 +51,7 @@
 
                     <div>
                         <label for="name">Data expedierii</label>
-                        <input type="date" name="data_expedierii" class="form-control" required>
+                        <input type="date" id="date_input_2" name="data_expedierii" class="form-control" required>
                     </div>
 
                     <div class="form-group">
@@ -108,11 +105,12 @@
             })
             .catch(error => {
                 console.error('Error:', error);
+                document.getElementById("error").innerText = error.value;
                 document.getElementById("error").removeAttribute('hidden');
             });
     });
 
-    fetch('/api/table/last')
+    fetch('/api/table/next')
         .then(response => {
             // Check if the response is OK (status 200)
             if (!response.ok) {
@@ -122,13 +120,24 @@
         })
         .then(data => {
             // Once JSON data is fetched, do something with it
-            console.log(data)
-            const lastElementId = document.getElementById('reg_id');
-            lastElementId.textContent = data;
+            document.getElementById('id').value = data;
         })
         .catch(error => {
             console.error('There was a problem with your fetch operation:', error);
         });
+
+    function CurentDateForm(){
+        var currentDate = new Date();
+        
+        // Format the date as yyyy-mm-dd
+        var formattedDate = currentDate.getFullYear() + '-' +
+                            ('0' + (currentDate.getMonth() + 1)).slice(-2) + '-' +
+                            ('0' + currentDate.getDate()).slice(-2);
+            
+        document.getElementById('date_input_1').value = formattedDate;
+        document.getElementById('date_input_2').value = formattedDate;
+    }
+    CurentDateForm();
 </script>
 
 {% endblock content %}

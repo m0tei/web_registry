@@ -48,7 +48,7 @@
                                                 <div class="form-group">
                                                     <label for="exampleInputUsername">Username</label>
                                                     <input class="form-control" id="exampleInputUsername" readonly 
-                                                           value="{{ current_user.username }}"
+                                                           value="{{ user['name'] }}"
                                                            aria-describedby="userHelp" placeholder="Enter email">
                                                 </div>
                                             </div>
@@ -56,19 +56,13 @@
                                                 <div class="form-group">
                                                     <label {% if not current_user.email %} class="text-danger" {% endif %} 
                                                            for="exampleInputEmail1">Email address</label>
-                                                    <input type="email"
-                                                           {% if current_user.email %} readonly value="{{ current_user.email }}" {% endif %}  
-                                                           class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                                                    {% if not current_user.email %}       
-                                                        <small id="emailHelp" class="form-text text-danger">
-                                                            You don't have an email address associated with this account.
-                                                        </small>
-                                                    {% endif %}    
+                                                    <input type="email" readonly value="{{ user['email'] }}" 
+                                                           class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">   
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 mb-4"> 
                                                 <label>Role:  </label>   
-                                                <button class="btn btn-outline-secondary">{{current_user.role}}</button>
+                                                <button class="btn btn-outline-secondary">{{ user['role'] }}</button>
                                             </div>
                                         </div>
                                     </div>

@@ -89,7 +89,7 @@ def add():
         return jsonify({"error": "Entry is in the future!"}), 400
 
     id_entry = request.form.get('id')
-    if (id_entry == ''):
+    if not id_entry:
         last_document = year_selected.find_one(
             sort=[("_id", pymongo.DESCENDING)])
         if (last_document):
@@ -98,7 +98,7 @@ def add():
             last_id = 0
         last_id = last_id+1
     else:
-        last_id = int(id_entry)
+        last_id=id_entry
 
     entry = {
         "_id": last_id,
@@ -159,16 +159,15 @@ def GetTableUser(id):
     return jsonify(last_entries_list), 200
 
 
-@blueprint.route('/api/table/last', methods=['GET'])
+@blueprint.route('/api/table/next', methods=['GET'])
 @login_required
-def last_element():
+def next_element():
     last_document = this_year_db.find_one(sort=[("_id", pymongo.DESCENDING)])
 
     if (last_document != None):
-        response = str(last_document['_id']) + \
-            '/' + last_document['data_inregistrarii']
+        response = int(last_document["_id"]) + 1
     else:
-        response = 0
+        response = 1
 
     if response:
         return jsonify(response), 200

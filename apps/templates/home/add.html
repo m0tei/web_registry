@@ -40,18 +40,16 @@
                                         <h5>Adauga o intrare in registru</h5>
                                     </div>
                                     <div class="card-body">
-                                        <h6>Ultimul numar din registru: </h6>
-                                        <label id="reg_id"></label>
                                         <form id="form_add">
                                             <input type="text" name="from" value="user" hidden>
                                             <div class="form-group">
-                                                <label for="name">Nr. de inregistrare (optional)</label>
-                                                <input type="number" name="id" class="form-control">
+                                                <label for="name">Nr. de inregistrare</label>
+                                                <input type="number" id="id" name="id" class="form-control">
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="name">Data</label>
-                                                <input type="date" id="date_input_1" name="data" class="form-control" required>
+                                                <input type="date" id="date_input_1" name="date" class="form-control" required>
                                             </div>
 
                                             <div class="form-group">
@@ -143,9 +141,8 @@
             });
     });
 
-    fetch('/api/table/last')
+    fetch('/api/table/next')
             .then(response => {
-                // Check if the response is OK (status 200)
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -154,8 +151,7 @@
             })
             .then(data => {
                 // Once JSON data is fetched, do something with it
-                const lastElementId = document.getElementById('reg_id');
-                lastElementId.textContent = data;
+                document.getElementById('id').value = data;
             })
             .catch(error => {
                 console.error('There was a problem with your fetch operation:', error);
