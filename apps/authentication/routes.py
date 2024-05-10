@@ -82,7 +82,7 @@ def register():
         "email": str(request.form.get('email')),
         "password": request.form.get('password'),
         "role": request.form.get('admin'),
-        "active": request.form.get('active')
+        "active": True
     }
 
     # Encrypt the password
