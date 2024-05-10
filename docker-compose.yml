@@ -28,9 +28,21 @@ services:
       - type: volume
         source: db_config
         target: /data/configdb
+    
+  mongo-express:
+    image: mongo-express
+    container_name: mongo_express
+    restart: always
+    networks:
+      - db_network
+    ports:
+      - 8081:8081
     environment:
-      MONGO_INITDB_ROOT_USERNAME: tpopoviciu_admin
-      MONGO_INITDB_ROOT_PASSWORD: tpopoiciu_db_admin_pass
+      - ME_CONFIG_OPTIONS_EDITORTHEME = ambiance
+      - ME_CONFIG_MONGODB_SERVER = mongo
+      - ME_CONFIG_MONGODB_ADMINUSERNAME = tpopoviciu
+      - ME_CONFIG_MONGODB_ADMINPASSWORD = tpopoviciu_db_pass
+
 
 volumes:
   db_data:
@@ -43,3 +55,4 @@ volumes:
 networks:
   db_network:
     name: db_network
+    driver: bridge
