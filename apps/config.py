@@ -84,7 +84,7 @@ config_dict = {
     'Debug'     : DebugConfig
 }
 
-MONGO_DB_HOST = os.getenv("MONGO_DB_HOST", 'mongo')
+MONGO_DB_HOST = os.getenv("MONGO_DB_HOST", 'localhost')
 
 client = pymongo.MongoClient(MONGO_DB_HOST,27017)
 db = client.databasePopoviciu
