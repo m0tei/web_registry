@@ -9,6 +9,7 @@ class User(UserMixin):
         self.email = user_data["email"]
         self.password = user_data["password"]
         self.role = user_data["role"]
+        self.status = user_data["active"]
 
     @staticmethod
     def is_authenticated():
@@ -30,6 +31,9 @@ class User(UserMixin):
     
     def get_role(self):
         return self.role
+    
+    def get_active(self):
+        return self.active
     
     def __str__(self):
         return str(self)

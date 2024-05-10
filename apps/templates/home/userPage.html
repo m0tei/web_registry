@@ -61,8 +61,12 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 mb-4"> 
-                                                <label>Role:  </label>   
-                                                <button class="btn btn-outline-secondary">{{ user['role'] }}</button>
+                                                <label>Role: </label>   
+                                                <button class="btn {% if user['role'] == 'admin' %}
+                                                                    btn-success
+                                                                    {% elif user['role'] == 'user' %}
+                                                                    btn-secondary
+                                                                    {% endif %} ">{{ user['role'] }}</button>
                                             </div>
                                         </div>
                                     </div>

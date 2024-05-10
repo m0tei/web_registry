@@ -50,7 +50,7 @@
                                                         <th>Numele</th>
                                                         <th>Email</th>
                                                         <th>Role</th>
-                                                        <th>Delete</th>
+                                                        <th>Active</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="table_body">
@@ -116,9 +116,19 @@
             const response = await fetch("/api/users/show");
             const jsonData = await response.json();
 
+            table.innerHTML = '';
+
             jsonData.forEach((item) => {
                 const row = document.createElement("tr");
-                row.innerHTML = `<td><a href="/users/${item._id}">${item.name}</a></td><td>${item.email}</td><td>${item.role}</td><td><button class="btn btn-danger" onclick="deleteUser('${item._id}')">delete <i class="feather icon-trash"></i></button></td>`;
+                row.innerHTML = `
+                    <td><a href="/users/${item._id}">${item.name}</a></td>
+                    <td>${item.email}</td>
+                    <td>${item.role}</td>
+                    <td>
+                        <button class="btn ${item.active ? 'btn-outline-success' : 'btn-outline-secondary'} btn-danger" onclick="switchstatusUser('${item._id}')">
+                            ${item.active ? 'active': 'inactive'} <i class="feather icon-trash"></i>
+                        </button>
+                    </td>`;
                 table.appendChild(row);
             });
         } catch (error) {
@@ -126,10 +136,10 @@
         }
     }
 
-    async function deleteUser(id) {
-        const response = await fetch('/api/users/delete/' + id)
+    async function switchstatusUser(id) {
+        const response = await fetch('/api/users/switchstatus/' + id)
         if(response.ok)
-            location.reload()
+            populateUsers();
     }
 
     document.getElementById('createUser_form').addEventListener('submit', function (event) {

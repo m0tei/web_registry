@@ -215,24 +215,26 @@ def download(year):
     workbook = openpyxl.Workbook()
     sheet = workbook.active
     specific_year = getattr(db, year, None)
-    all_documents = specific_year.find()
+    all_documents = specific_year.find().sort("_id", 1)
 
     header = ["ID", "Data", "Nr. și data documentului", "De unde provine documentul", "Continut pe scurt",
               "Compartiment repartzat", "Data expedierii", "Destinatar", "Nr. de inregistrare la care se conex. doc. si indic. dos."]
 
     sheet.append(header)
-    prevline = 0
+    prevline = 1
     for line in all_documents:
-        while (prevline+1 != line["_id"]):
+        while (prevline != line["_id"]):
             empty_line = {}
             sheet.append(empty_line)
             prevline += 1
 
-        del line["user"]
-        del line["date"]
+        if "user" in line:
+            del line["user"]
+        if "date" in line:
+            del line["date"]
         line_formated = list(line.values())
         sheet.append(line_formated)
-        prevline = line["_id"]
+        prevline = prevline+1
 
     with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=False) as temp:
         # Save workbook to the temporary file
@@ -244,9 +246,9 @@ def download(year):
     attachmentFilename = f"{today_date}_registru__{year}.xlsx"
     response = make_response(send_file(temp.name, as_attachment=True))
     response.headers['Content-Disposition'] = f'attachment; filename={attachmentFilename}'
-
+    response.status_code = 200
     # Send the file to the client
-    return response, 200
+    return response
 
 
 @blueprint.route('/api/users/show', methods=['GET'])
@@ -256,15 +258,28 @@ def getUsers():
     return users, 200
 
 
-@blueprint.route('/api/users/delete/<id>', methods=['GET'])
+@blueprint.route('/api/users/switchstatus/<id>', methods=['GET'])
 @login_required
-def delUser(id):
-    response = db.users.delete_one({'_id': id})
+def SwitchStatusUser(id):
+        if current_user._id == id:
+            return jsonify({'message': 'Cannot change current user role!'}), 400
 
-    if response.deleted_count == 1:
-        return jsonify({'message': 'Entry deleted successfully'}), 200
-    else:
-        return jsonify({'error': 'Entry not found'}), 404
+        if db.users.find_one({"_id": id})["active"] == True:
+            result = db.users.update_one(
+                {'_id': id},
+                {'$set': {'active': False}}
+            )
+        else:
+            result = db.users.update_one(
+                {'_id': id},
+                {'$set': {'active': True}}
+            )
+
+        if result.modified_count == 1:
+            return jsonify({'message': 'User inactive successfully'}), 200
+        else:
+            return jsonify({'error': 'User not found'}), 404
+        
 
 
 #####################################################################

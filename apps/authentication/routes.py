@@ -44,14 +44,19 @@ def login():
             "name": user_db['name'],
             "email": user_db['email'],
             "password": user_db['password'],
-            "role": user_db['role']
+            "role": user_db['role'],
+            "active": user_db['active']
         }
         user=User(user_data)
+
+        if user_data['active'] == False:
+            return render_template('accounts/login.html',
+                               msg='Userul este inactiv!',
+                               form=login_form)
 
         # Check the password
         if verify_pass(password, user.get_pass()):
             login_user(user)
-            print(session['_user_id'])
             if(user_data["role"] == "user"):
                 return redirect(url_for('home_blueprint.user'))
             else:
@@ -59,7 +64,7 @@ def login():
 
         # Something (user or pass) is not ok
         return render_template('accounts/login.html',
-                               msg='Wrong user or password',
+                               msg='Emailul sau parola sunt gresite!',
                                form=login_form)
 
     if not current_user.is_authenticated:
@@ -76,7 +81,8 @@ def register():
         "name": str(request.form.get('name')),
         "email": str(request.form.get('email')),
         "password": request.form.get('password'),
-        "role": request.form.get('admin')
+        "role": request.form.get('admin'),
+        "active": request.form.get('active')
     }
 
     # Encrypt the password
@@ -86,6 +92,8 @@ def register():
         user["role"] = "admin"
     else:
         user["role"] = "user"
+    
+    user['active'] = True
 
     # Check for existing email address
     if db.users.find_one({"email": user['email']}):

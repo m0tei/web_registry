@@ -4,7 +4,7 @@ FROM python:3.9-slim-buster
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV FLASK_APP run.py
-ENV DEBUG True
+ENV DEBUG False
 
 WORKDIR /app
 
@@ -23,8 +23,7 @@ COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# USER appuser
-
+USER appuser
 EXPOSE 5000
 
 COPY . .

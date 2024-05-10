@@ -115,8 +115,6 @@
 {% block javascripts %}
 <script>
     document.getElementById('form_add').addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent the default form submission
-
         // Serialize form data
         var formData = new FormData(this);
 
@@ -139,9 +137,12 @@
                 document.getElementById("error").removeAttribute('hidden');
                 console.error('Error:', error);
             });
-    },  { passive: false });
+    });
 
-    fetch('/api/table/next')
+
+
+    function CurentDateForm(){
+        fetch('/api/table/next')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -157,7 +158,6 @@
                 console.error('There was a problem with your fetch operation:', error);
             });
 
-    function CurentDateForm(){
         var currentDate = new Date();
         
         // Format the date as yyyy-mm-dd
