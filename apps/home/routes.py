@@ -190,6 +190,7 @@ def DeleteRow(id):
 def collectionList():
     try:
         collections = db.list_collection_names()
+        collections.reverse()
         if "delete_me" in collections:
             collections.remove("delete_me")
         if "users" in collections:

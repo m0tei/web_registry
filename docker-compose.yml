@@ -3,7 +3,7 @@ services:
   web_app:
     container_name: web_app
     restart: always
-    build: .
+    build: . # m0tei/webRegistryApp:latest
     networks:
       - db_network
     ports:
@@ -16,20 +16,26 @@ services:
         target: /app
   
   mongo:
-    image: mongodb/mongodb-community-server:latest
+    image: mongo:5.0
     container_name: mongo
     restart: always
     networks:
       - db_network
-    ports:
-      - '27017:27017'
     volumes:
       - type: volume
         source: db_data
         target: /data/db
+      - type: volume
+        source: db_config
+        target: /data/configdb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: tpopoviciu_admin
+      MONGO_INITDB_ROOT_PASSWORD: tpopoiciu_db_admin_pass
 
 volumes:
   db_data:
+    driver: local
+  db_config:
     driver: local
   app_data:
     driver: local
