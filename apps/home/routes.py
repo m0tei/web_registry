@@ -241,7 +241,7 @@ def download(year):
         # Get the absolute path of the temporary file
         temp_path = temp.name
 
-    attachmentFilename = f"registru_{today_date}_{year}.xlsx"
+    attachmentFilename = f"{today_date}_registru__{year}.xlsx"
     response = make_response(send_file(temp.name, as_attachment=True))
     response.headers['Content-Disposition'] = f'attachment; filename={attachmentFilename}'
 
