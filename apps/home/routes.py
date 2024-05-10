@@ -131,15 +131,13 @@ def add():
 @blueprint.route('/api/table/show', methods=['GET'])
 @login_required
 def GetTable():
-    last_entries_cursor = this_year_db.find().sort(
-        [("_id", pymongo.DESCENDING)])
-    
-    last_entries_list = []
-    
-    for entry in last_entries_cursor:
-        entry["user_id"]=entry["user"]
+    last_entries_cursor = this_year_db.find().sort([("_id", -1)])
+    last_entries_list = [entry for entry in last_entries_cursor]
+
+    # Optionally, you can modify the entries here
+    for entry in last_entries_list:
+        entry["user_id"] = entry["user"]
         entry["user_name"] = db.users.find_one({"_id": entry["user"]})["name"]
-        last_entries_list.append(entry)
 
     return jsonify(last_entries_list), 200
 
@@ -178,7 +176,7 @@ def next_element():
 @blueprint.route('/api/table/del/<id>', methods=['GET'])
 @login_required
 def DeleteRow(id):
-    response = this_year_db.delete_one({'_id': int(id)})
+    response = this_year_db.delete_one({'_id': id})
 
     if response.deleted_count == 1:
         return jsonify({'message': 'Entry deleted successfully'}), 200
