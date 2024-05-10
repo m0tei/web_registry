@@ -101,7 +101,7 @@ def add():
         last_id=id_entry
 
     entry = {
-        "_id": last_id,
+        "_id": int(last_id),
         "user": session["_user_id"],
         "date": str(datetime.date.today()),
         "data_inregistrarii": str(request.form.get('data')),
