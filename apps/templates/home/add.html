@@ -129,13 +129,11 @@
                     window.location.href = '/index';
                 } else {
                     // Handle errors here if needed
-                    console.error('Form submission failed:', response.status);
                     document.getElementById("error").removeAttribute('hidden');
                 }
             })
             .catch(error => {
-                document.getElementById("error").removeAttribute('hidden');
-                console.error('Error:', error);
+                //document.getElementById("error").removeAttribute('hidden');
             });
     });
 

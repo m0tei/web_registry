@@ -67,6 +67,9 @@
                                                                     {% elif user['role'] == 'user' %}
                                                                     btn-secondary
                                                                     {% endif %} ">{{ user['role'] }}</button>
+                                                <button class="btn {% if user['active'] %}btn-outline-success{% else %}btn-outline-secondary{% endif %}">
+                                                         {% if user['active'] %}active{% else %}inactive{% endif %}
+                                                </button>
                                             </div>
                                         </div>
                                     </div>

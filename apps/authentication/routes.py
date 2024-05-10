@@ -36,7 +36,7 @@ def login():
         user_db = db.users.find_one({'email':email})
         if user_db is None:
             return render_template( 'accounts/login.html',
-                                msg='Unknown User or Email',
+                                msg='Email necunoscut!',
                                 form=login_form)
         
         user_data={
@@ -49,13 +49,14 @@ def login():
         }
         user=User(user_data)
 
-        if user_data['active'] == False:
-            return render_template('accounts/login.html',
-                               msg='Userul este inactiv!',
-                               form=login_form)
+
 
         # Check the password
         if verify_pass(password, user.get_pass()):
+            if user_data['active'] == False:
+                return render_template('accounts/login.html',
+                               msg='Userul este inactiv!',
+                               form=login_form)
             login_user(user)
             if(user_data["role"] == "user"):
                 return redirect(url_for('home_blueprint.user'))

@@ -28,7 +28,6 @@ def user():
 @login_required
 def edit(id):
     entry = this_year_db.find_one({"_id": id})
-    print("entry is: ", entry)
     if entry is None:
         render_template('home/index.html', segment= 'index')
     return render_template('home/edit.html', entry=json.dumps(entry))
@@ -85,25 +84,20 @@ def add():
     yearSelected = dt.strptime(date_string, "%Y-%m-%d")
     year_selected = getattr(db, str(yearSelected.year), None)
 
-    if (today_date.year < yearSelected.year):
+    if dt.today().year < yearSelected.year:
         return jsonify({"error": "Entry is in the future!"}), 400
 
     id_entry = request.form.get('id')
     if not id_entry:
-        last_document = year_selected.find_one(
-            sort=[("_id", pymongo.DESCENDING)])
-        if (last_document):
-            last_id = last_document['_id']
-        else:
-            last_id = 0
-        last_id = last_id+1
+        last_document = year_selected.find_one(sort=[("_id", DESCENDING)])
+        last_id = last_document['_id'] + 1 if last_document else 1
     else:
-        last_id=id_entry
+        last_id = id_entry
 
     entry = {
         "_id": int(last_id),
         "user": session["_user_id"],
-        "date": str(datetime.date.today()),
+        "date": str(dt.today().date()),
         "data_inregistrarii": str(request.form.get('data')),
         "nr_si_data_documentului": request.form.get('nr_si_data'),
         "de_unde_provine_documentul": request.form.get('provine_doc'),
@@ -113,17 +107,25 @@ def add():
         "destinatar": request.form.get('destinatar'),
         "nr_de_inregistrare_conex_doc_indic_dos": request.form.get('nr_inregistrare'),
     }
+    print(entry)  # Check if entry is as expected
 
-    existing_entry = year_selected.find_one({"_id": last_id})
+    existing_entry = year_selected.find_one({"_id": int(last_id)})
     if existing_entry and request.form.get('from') == "admin":
-        # Update existing entry
-        year_selected.update_one({"_id": last_id}, {"$set": entry})
-        return jsonify({"msg": "Entry updated"}), 200
+        try:
+            year_selected.update_one({"_id": int(last_id)}, {"$set": entry})
+            return jsonify({"msg": "Entry updated"}), 200
+        except Exception as e:
+            print("Error updating entry:", e)
+            return jsonify({"error": "Failed to update entry"}), 500
     else:
         if not existing_entry:
-        # Insert new entry
-            if year_selected.insert_one(entry):
-                return jsonify({"msg": "Entry added"}), 200
+            try:
+                result = year_selected.insert_one(entry)
+                if result.inserted_id:
+                    return jsonify({"msg": "Entry added"}), 200
+            except Exception as e:
+                print("Error inserting entry:", e)
+                return jsonify({"error": "Failed to insert entry"}), 500
 
     return jsonify({"error": "Already exists and you cannot edit it!"}), 400
 
@@ -176,7 +178,7 @@ def next_element():
 @blueprint.route('/api/table/del/<id>', methods=['GET'])
 @login_required
 def DeleteRow(id):
-    response = this_year_db.delete_one({'_id': id})
+    response = this_year_db.delete_one({'_id': int(id)})
 
     if response.deleted_count == 1:
         return jsonify({'message': 'Entry deleted successfully'}), 200

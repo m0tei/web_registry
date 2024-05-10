@@ -75,7 +75,7 @@
       const response = await fetch(path)
 
       if (response.status == 200){
-        location.reload(true);
+        populateTable();
       }
     }
     catch (error) {
