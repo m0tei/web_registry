@@ -3,7 +3,7 @@ services:
   web_app:
     container_name: web_app
     restart: always
-    build: . # m0tei/webRegistryApp:latest
+    build: . # m0tei/registru_web:0.0.1
     networks:
       - db_network
     ports:
