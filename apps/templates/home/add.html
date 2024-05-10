@@ -43,57 +43,57 @@
                                         <form id="form_add">
                                             <input type="text" name="from" value="user" hidden>
                                             <div class="form-group">
-                                                <label for="name">Nr. de inregistrare</label>
+                                                <label for="id">Nr. de înregistrare</label>
                                                 <input type="number" id="id" name="id" class="form-control">
                                             </div>
-
+                                        
                                             <div class="form-group">
-                                                <label for="name">Data</label>
+                                                <label for="date_input_1">Data</label>
                                                 <input type="date" id="date_input_1" name="data" class="form-control" required>
                                             </div>
-
+                                        
                                             <div class="form-group">
-                                                <label for="name">Nr. și data documentului</label>
-                                                <input type="text" name="nr_si_data" class="form-control">
+                                                <label for="nr_si_data">Nr. și data documentului</label>
+                                                <input type="text" id="nr_si_data" name="nr_si_data" class="form-control">
                                             </div>
-
+                                        
                                             <div class="form-group">
-                                                <label for="name">De unde provine documentul</label>
-                                                <input type="text" name="provine_doc" class="form-control">
+                                                <label for="provine_doc">De unde provine documentul</label>
+                                                <input type="text" id="provine_doc" name="provine_doc" class="form-control">
                                             </div>
-
+                                        
                                             <div class="form-group">
-                                                <label for="name">Continut pe scurt al documentului</label>
-                                                <input type="text" name="cont_scurt" class="form-control">
+                                                <label for="cont_scurt">Conținut pe scurt al documentului</label>
+                                                <input type="text" id="cont_scurt" name="cont_scurt" class="form-control">
                                             </div>
-
+                                        
                                             <div class="form-group">
-                                                <label for="name">Compartimentul căruia i s-a repartizat documentul si
-                                                    semnătura de primire</label>
-                                                <input type="text" name="comp_repartizat" class="form-control">
+                                                <label for="comp_repartizat">Compartimentul căruia i s-a repartizat documentul și semnătura de primire</label>
+                                                <input type="text" id="comp_repartizat" name="comp_repartizat" class="form-control">
                                             </div>
-
-                                            <div>
-                                                <label for="name">Data expedierii</label>
+                                        
+                                            <div class="form-group">
+                                                <label for="date_input_2">Data expedierii</label>
                                                 <input type="date" id="date_input_2" name="data_expedierii" class="form-control" required>
                                             </div>
-
+                                        
                                             <div class="form-group">
-                                                <label for="name">Destinatar</label>
-                                                <input type="text" name="destinatar" class="form-control">
+                                                <label for="destinatar">Destinatar</label>
+                                                <input type="text" id="destinatar" name="destinatar" class="form-control">
                                             </div>
-
+                                        
                                             <div class="form-group">
-                                                <label for="name">Nr. de inregistrare la care se conex. doc. si indic.
-                                                    dos.</label>
-                                                <input type="text" name="nr_inregistrare" class="form-control">
+                                                <label for="nr_inregistrare">Nr. de înregistrare la care se conex. doc. și indic. dos.</label>
+                                                <input type="text" id="nr_inregistrare" name="nr_inregistrare" class="form-control">
                                             </div>
+                                        
                                             <div id="error" class="alert alert-danger" role="alert" hidden>
-                                                Exista deja o intrare cu acest numar de inregistrare!
+                                                Există deja o înregistrare cu acest număr de înregistrare!
                                             </div>
-
+                                        
                                             <input type="submit" value="Crează" class="btn btn-primary">
                                         </form>
+                                                                                                                    
                                     </div>
                                 </div>
                             </div>
@@ -139,7 +139,7 @@
                 document.getElementById("error").removeAttribute('hidden');
                 console.error('Error:', error);
             });
-    });
+    },  { passive: false });
 
     fetch('/api/table/next')
             .then(response => {
