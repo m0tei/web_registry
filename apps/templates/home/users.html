@@ -43,7 +43,7 @@
                                             atribui roluri</span>
                                     </div>
                                     <div class="card-block table-border-style">
-                                        <div class="table-responsive">
+                                        <div class="table-responsive" style="max-height: 400px;">
                                             <table class="table table-hover">
                                                 <thead>
                                                     <tr>
@@ -71,24 +71,29 @@
                                     <div class="card-body">
                                         <form id="createUser_form">
                                             <div class=" form-group">
-                                                <label for="createUser_nume_label">Nume</label>
-                                                <input type="text" class="form-control" name="name" placeholder="Nume">
+                                                <label for="nume_input">Nume</label>
+                                                <input type="text" id="nume_input" class="form-control" name="name" placeholder="Nume">
                                             </div>
                                             <div class="form-group">
-                                                <label for="createUser_email_label">Email address</label>
-                                                <input type="email" class="form-control" name="email" placeholder="Email">
+                                                <label for="email_input">Email address</label>
+                                                <input type="email" id="email_input" class="form-control" name="email" placeholder="Email">
                                             </div>
                                             <div class="form-group">
-                                                <label for="createUser_password_label">Password</label>
-                                                <input type="password" class="form-control" name="password"
+                                                <label for="passward_input">Password</label>
+                                                <input type="password" id="password_input" class="form-control" name="password"
                                                     placeholder="Password">
                                             </div>
                                             <div class="form-group form-check">
-                                                <input type="checkbox" class="form-check-input" name="admin">
-                                                <label class="form-check-label" for="exampleCheck1">Va fi acest user
+                                                <input type="checkbox" id="check_input" class="form-check-input" name="admin">
+                                                <label class="form-check-label" for="check_input">Va fi acest user
                                                     admin?</label>
                                             </div>
-                                            <div class="error error--hidden"></div>
+                                            <div id="success" class="alert alert-success" role="alert" hidden>
+                                                Userul a fost adaugat!
+                                            </div>
+                                            <div id="error" class="alert alert-danger" role="alert" hidden>
+                                                Exista un user cu acest email!
+                                            </div>
                                             <input type="submit" value="Crează" class="btn btn-primary">
                                         </form>
                                     </div>
@@ -125,8 +130,8 @@
                     <td>${item.email}</td>
                     <td>${item.role}</td>
                     <td>
-                        <button class="btn ${item.active ? 'btn-outline-success' : 'btn-outline-secondary'} btn-danger" onclick="switchstatusUser('${item._id}')">
-                            ${item.active ? 'active': 'inactive'} <i class="feather icon-trash"></i>
+                        <button class="btn ${item.active ? 'btn-outline-success' : 'btn-outline-secondary'}" onclick="switchstatusUser('${item._id}')">
+                            ${item.active ? "active <i class='feather icon-user-check'></i>" : "inactive <i class='feather icon-user-x'></i>"}
                         </button>
                     </td>`;
                 table.appendChild(row);
@@ -155,11 +160,17 @@
             .then(response => {
                 if (response.ok) {
                     // Redirect to the success page after a successful submission
-                    window.location.href = '/users';
+                    document.getElementById("error").setAttribute('hidden', true);
+                    document.getElementById('nume_input').value = '';
+                    document.getElementById('email_input').value = '';
+                    document.getElementById('password_input').value = '';
+                    populateUsers();
+                    document.getElementById('success').removeAttribute('hidden');
                 } else {
                     // Handle errors here if needed
                     console.error('Form submission failed:', response.status);
-                    $error.text(resp.responseJSON.error).removeClass("error--hidden");
+                    document.getElementById("success").setAttribute('hidden', true);
+                    document.getElementById("error").removeAttribute('hidden');
                 }
             })
             .catch(error => {

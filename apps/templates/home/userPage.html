@@ -68,7 +68,7 @@
                                                                     btn-secondary
                                                                     {% endif %} ">{{ user['role'] }}</button>
                                                 <button class="btn {% if user['active'] %}btn-outline-success{% else %}btn-outline-secondary{% endif %}">
-                                                         {% if user['active'] %}active{% else %}inactive{% endif %}
+                                                         {% if user['active'] %}active <i class="feather icon-user-check"></i>{% else %}inactive <i class="feather icon-user-x"></i>{% endif %}
                                                 </button>
                                             </div>
                                         </div>

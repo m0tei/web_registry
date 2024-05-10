@@ -89,7 +89,7 @@ def add():
 
     id_entry = request.form.get('id')
     if not id_entry:
-        last_document = year_selected.find_one(sort=[("_id", DESCENDING)])
+        last_document = year_selected.find_one(sort=[("_id", pymongo.DESCENDING)])
         last_id = last_document['_id'] + 1 if last_document else 1
     else:
         last_id = id_entry
@@ -107,7 +107,6 @@ def add():
         "destinatar": request.form.get('destinatar'),
         "nr_de_inregistrare_conex_doc_indic_dos": request.form.get('nr_inregistrare'),
     }
-    print(entry)  # Check if entry is as expected
 
     existing_entry = year_selected.find_one({"_id": int(last_id)})
     if existing_entry and request.form.get('from') == "admin":
