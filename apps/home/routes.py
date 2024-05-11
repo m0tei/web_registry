@@ -136,7 +136,7 @@ def add():
             try:
                 result = year_selected.insert_one(entry)
                 if result.inserted_id:
-                    return render_template('home/index.html', segment='index')
+                    return jsonify({"msg":"Entry added!"}), 200
             except Exception as e:
                 print("Error inserting entry:", e)
                 return jsonify({"error": "Failed to insert entry"}), 500

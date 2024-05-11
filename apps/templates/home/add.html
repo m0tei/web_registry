@@ -115,7 +115,7 @@
 {% block javascripts %}
 <script>
     document.getElementById('form_add').addEventListener('submit', function (event) {
-        //event.preventDefault();
+        event.preventDefault();
         // Serialize form data
         var formData = new FormData(this);
 
@@ -127,6 +127,7 @@
             .then(response => {
                 if (response.ok) {
                     // Redirect to the success page after a successful submission
+                    console.log("Entry added!");
                     window.location.href = '/index';
                 } else {
                     // Handle errors here if needed
