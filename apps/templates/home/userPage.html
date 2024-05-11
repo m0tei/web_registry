@@ -124,34 +124,80 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
-  async function populateTable() {
+  async function deleteRow(id) {
+    console.log("delete: " + id);
     try {
-      const table = document.getElementById("registry_table");
-      const response = await fetch("/api/table/show/"+"{{user['_id']}}");
-      const jsonData = await response.json();
+      const path = "/api/table/del/" + id;
+      const response = await fetch(path);
 
-      table.innerHTML = '';
-
-      jsonData.forEach((item) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `<td>${item._id}</td>
-                        <td>${item.data_inregistrarii}</td>
-                        <td>${item.nr_si_data_documentului}</td>
-                        <td>${item.de_unde_provine_documentul}</td>
-                        <td>${item.continutul_documentului}</td>
-                        <td>${item.repartizare}</td>
-                        <td>${item.data_expedierii}</td>
-                        <td>${item.destinatar}</td>
-                        <td>${item.nr_de_inregistrare_conex_doc_indic_dos}</td>
-                        <td><button class="btn btn-danger" onclick="deleteRow('${item._id}')">delete <i class="far fa-trash-alt"></i></button> 
-                          <a href="/edit/${item._id}"><button class="btn btn-outline-secondary">edit <i class="feather icon-edit"></i></button></a></td>`;
-        table.appendChild(row);
-      });
+      if (response.status == 200) {
+        const rowToRemove = document.getElementById(`entry_` + id); // Use the id to select the row to be removed
+        if (rowToRemove) {
+          rowToRemove.remove();
+        }
+      }
     } catch (error) {
-      console.error("Error fetching table contents:", error);
+      console.error("Error deleting row: ", error);
     }
   }
 
-  populateTable();
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // update table function
+    let page = 1; // Current page
+    let isLoading = false; // Indicator to avoid multiple loading
+
+    // Function for loading more data
+    async function loadMoreData() {
+      if (isLoading) return; // If loading is already in progress, exit
+      isLoading = true; // Set the indicator to true to indicate the beginning of loading
+
+      try {
+        const response = await fetch(`/api/table/show/{{user['_id']}}?page=${page}`); // Call the API with the current page number
+        const jsonData = await response.json();
+
+        const table = document.getElementById("registry_table");
+
+        if (jsonData.length === 0) {
+          noMoreEntries = true; // If no data returned, set the indicator to true
+          return;
+        }
+
+        jsonData.forEach((item) => {
+          const row = document.createElement("tr");
+          row.id = `entry_${item._id}`;
+          row.innerHTML = `<td>${item._id}</td>
+                          <td>${item.data_inregistrarii}</td>
+                          <td>${item.nr_si_data_documentului}</td>
+                          <td>${item.de_unde_provine_documentul}</td>
+                          <td>${item.continutul_documentului}</td>
+                          <td>${item.repartizare}</td>
+                          <td>${item.data_expedierii}</td>
+                          <td>${item.destinatar}</td>
+                          <td>${item.nr_de_inregistrare_conex_doc_indic_dos}</td>
+                          <td><button class="btn btn-danger" onclick=deleteRow('${item._id}')>delete <i class="far fa-trash-alt"></i></button> 
+                            <a href="/edit/${item._id}"><button class="btn btn-outline-secondary">edit <i class="feather icon-edit"></i></button></a></td>`;
+          table.appendChild(row);
+        });
+
+        page++; // Increment the page number
+
+        isLoading = false; // Set the indicator to false to indicate the end of loading
+      } catch (error) {
+        console.error("Error fetching more data:", error);
+      }
+    }
+
+    loadMoreData();
+
+    // Listen for the scroll event to detect if the user has reached the end of the page
+    window.addEventListener("scroll", () => {
+      const { scrollTop, scrollHeight, clientHeight } =
+        document.documentElement;
+      if (scrollTop + clientHeight >= scrollHeight - 5) {
+        loadMoreData(); // If the user has reached the end of the page, load more data
+      }
+    });
+  });
 </script>
 {% endblock javascripts %}

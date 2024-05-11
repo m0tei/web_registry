@@ -172,19 +172,27 @@ def GetTable():
 @blueprint.route('/api/table/show/<id>', methods=['GET'])
 @login_required
 def GetTableUser(id):
-    last_entries_cursor = this_year_db.find({"user": id}).sort(
-        [("_id", pymongo.DESCENDING)])
-    
-    last_entries_list = []
-    
-    for entry in last_entries_cursor:
-        entry["user_id"]=entry["user"]
+    # Get the page number from the request query parameters, default to 1 if not provided
+    page = int(request.args.get('page', 1))
+
+    # Number of entries per page
+    per_page = 10 # You can adjust this as needed
+
+    # Calculate the skip value based on the page number and number of entries per page
+    skip = (page - 1) * per_page
+
+    # Get the entries for the requested page using pagination
+    entries_cursor = this_year_db.find({"user": id}).sort([("_id", -1)]).skip(skip).limit(per_page)
+    entries_list = [entry for entry in entries_cursor]
+
+    # Optionally, you can modify the entries here
+    for entry in entries_list:
+        entry["user_id"] = entry["user"]
         entry["user_name"] = db.users.find_one({"_id": entry["user"]})["name"]
         entry["data_inregistrarii"] = format_date(entry["data_inregistrarii"])
         entry["data_expedierii"] = format_date(entry["data_expedierii"])
-        last_entries_list.append(entry)
-
-    return jsonify(last_entries_list), 200
+    
+    return jsonify(entries_list), 200
 
 
 @blueprint.route('/api/table/next', methods=['GET'])
