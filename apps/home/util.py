@@ -40,7 +40,7 @@ def format_date(input_date):
 
     # Format the parsed date to desired format
     formatted_date = parsed_date.strftime('%m/%d/%Y')
-
+    print(formatted_date)
     return formatted_date
 
 def format_reverse_date(input_date):
@@ -49,6 +49,5 @@ def format_reverse_date(input_date):
 
     # Format the parsed date to the reverse format
     formatted_date = parsed_date.strftime('%Y-%m-%d')
-    print(formatted_date)
 
     return formatted_date
