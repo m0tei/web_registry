@@ -8,33 +8,50 @@ from flask_login import login_required, logout_user, current_user
 from jinja2 import TemplateNotFound
 from apps.config import db
 from datetime import datetime as dt
+from apps.home.util import format_date, format_reverse_date
 import datetime
 import pymongo
+
 
 @blueprint.route('/index')
 @login_required
 def index():
-    user = db.users.find_one({'_id':session['_user_id']})
+    user = db.users.find_one({'_id': session['_user_id']})
     if user['role'] == "user":
          return render_template('home/user.html', segment='user')
     return render_template('home/index.html', segment='index')
 
+
 @blueprint.route('/user')
 @login_required
 def user():
+    user = db.users.find_one({'_id': session['_user_id']})
+    if user['role'] == "admin":
+         return render_template('home/index.html', segment='index')
     return render_template('home/user.html', segment='user')
 
 @blueprint.route('/edit/<int:id>')
 @login_required
 def edit(id):
+    user = db.users.find_one({'_id':session['_user_id']})
+    if user['role'] == "user":
+         return render_template('home/user.html', segment='user')
     entry = this_year_db.find_one({"_id": id})
     if entry is None:
         render_template('home/index.html', segment= 'index')
+
+    entry["data_inregistrarii"] = format_date(entry["data_inregistrarii"])
+    entry["data_expedierii"] = format_date(entry["data_expedierii"])
+    
     return render_template('home/edit.html', entry=json.dumps(entry))
 
 @blueprint.route('/users/<id>')
 @login_required
 def users(id):
+    user = db.users.find_one({'_id':session['_user_id']})
+    if user['role'] == "user":
+         return render_template('home/user.html', segment='user')
+
     if db.users.find_one({"_id": id}):
         user_data = db.users.find_one({"_id": id})
     else:
@@ -121,6 +138,7 @@ def add():
             try:
                 result = year_selected.insert_one(entry)
                 if result.inserted_id:
+                    index()
                     return jsonify({"msg": "Entry added"}), 200
             except Exception as e:
                 print("Error inserting entry:", e)
@@ -132,15 +150,27 @@ def add():
 @blueprint.route('/api/table/show', methods=['GET'])
 @login_required
 def GetTable():
-    last_entries_cursor = this_year_db.find().sort([("_id", -1)])
-    last_entries_list = [entry for entry in last_entries_cursor]
+    # Get the page number from the request query parameters, default to 1 if not provided
+    page = int(request.args.get('page', 1))
+
+    # Number of entries per page
+    per_page = 10 # You can adjust this as needed
+
+    # Calculate the skip value based on the page number and number of entries per page
+    skip = (page - 1) * per_page
+
+    # Get the entries for the requested page using pagination
+    entries_cursor = this_year_db.find().sort([("_id", -1)]).skip(skip).limit(per_page)
+    entries_list = [entry for entry in entries_cursor]
 
     # Optionally, you can modify the entries here
-    for entry in last_entries_list:
+    for entry in entries_list:
         entry["user_id"] = entry["user"]
         entry["user_name"] = db.users.find_one({"_id": entry["user"]})["name"]
+        entry["data_inregistrarii"] = format_date(entry["data_inregistrarii"])
+        entry["data_expedierii"] = format_date(entry["data_expedierii"])
 
-    return jsonify(last_entries_list), 200
+    return jsonify(entries_list), 200
 
 @blueprint.route('/api/table/show/<id>', methods=['GET'])
 @login_required
@@ -153,6 +183,8 @@ def GetTableUser(id):
     for entry in last_entries_cursor:
         entry["user_id"]=entry["user"]
         entry["user_name"] = db.users.find_one({"_id": entry["user"]})["name"]
+        entry["data_inregistrarii"] = format_date(entry["data_inregistrarii"])
+        entry["data_expedierii"] = format_date(entry["data_expedierii"])
         last_entries_list.append(entry)
 
     return jsonify(last_entries_list), 200
