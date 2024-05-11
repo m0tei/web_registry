@@ -36,13 +36,11 @@ def edit(id):
     user = db.users.find_one({'_id':session['_user_id']})
     if user['role'] == "user":
          return render_template('home/user.html', segment='user')
+    
     entry = this_year_db.find_one({"_id": id})
     if entry is None:
         render_template('home/index.html', segment= 'index')
 
-    entry["data_inregistrarii"] = format_date(entry["data_inregistrarii"])
-    entry["data_expedierii"] = format_date(entry["data_expedierii"])
-    
     return render_template('home/edit.html', entry=json.dumps(entry))
 
 @blueprint.route('/users/<id>')

@@ -67,21 +67,19 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
-
-  async function deleteRow(id) {
-    try {
-      const path = "/api/table/del/" + id;
-      const response = await fetch(path);
-
-      if (response.status == 200) {
-        populateTable();
-      }
-    } catch (error) {
-      console.error("Error deleting row: ", error);
-    }
-  }
-
   document.addEventListener("DOMContentLoaded", function () {
+    async function deleteRow(id) {
+      try {
+        const path = "/api/table/del/" + id;
+        const response = await fetch(path);
+
+        if (response.status == 200) {
+          loadMoreData();
+        }
+      } catch (error) {
+        console.error("Error deleting row: ", error);
+      }
+    }
     // update table function
     let page = 1; // Current page
     let isLoading = false; // Indicator to avoid multiple loading
@@ -98,10 +96,10 @@
         const table = document.getElementById("registry_table");
 
         if (jsonData.length === 0) {
-                noMoreEntries = true; // If no data returned, set the indicator to true
-                console.log("No more entries available");
-                return;
-            }
+          noMoreEntries = true; // If no data returned, set the indicator to true
+          console.log("No more entries available");
+          return;
+        }
 
         jsonData.forEach((item) => {
           const row = document.createElement("tr");
