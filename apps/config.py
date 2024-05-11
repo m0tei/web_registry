@@ -88,5 +88,5 @@ config_dict = {
 MONGO_DB_HOST = "localhost" #os.getenv("MONGO_DB_HOST", 'localhost')
 prod_connection_string = "mongodb://tpopoviciu:tpopoviciu_db_pass@mongo:27017/admin"
 
-client = pymongo.MongoClient(prod_connection_string)
+client = pymongo.MongoClient(MONGO_DB_HOST, 27017)
 db = client.databasePopoviciu

@@ -115,6 +115,7 @@
 {% block javascripts %}
 <script>
     document.getElementById('form_add').addEventListener('submit', function (event) {
+        //event.preventDefault();
         // Serialize form data
         var formData = new FormData(this);
 
