@@ -20,12 +20,16 @@
                 <div class="card">
                   <div class="card-header">
                     <h5>Registru intrari/iesiri</h5>
-                    <span class="d-block m-t-5">Creaza, Sterge sau Editeaza orice intrare in
-                      registru</span>
+                    <span class="d-block m-t-5"
+                      >Creaza, Sterge sau Editeaza orice intrare in
+                      registru</span
+                    >
                     <div style="padding-top: 7px"></div>
-                    <a href="/add"><button class="btn btn-primary" href="/add.html">
+                    <a href="/add"
+                      ><button class="btn btn-primary" href="/add.html">
                         Adauga
-                      </button></a>
+                      </button></a
+                    >
                   </div>
                   <div class="card-block table-border-style">
                     <div class="table-responsive">
@@ -45,8 +49,7 @@
                             <th>Delete</th>
                           </tr>
                         </thead>
-                        <tbody id="registry_table">
-                        </tbody>
+                        <tbody id="registry_table"></tbody>
                       </table>
                     </div>
                   </div>
@@ -67,19 +70,23 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    async function deleteRow(id) {
-      try {
-        const path = "/api/table/del/" + id;
-        const response = await fetch(path);
+  async function deleteRow(id) {
+    console.log("delete: " + id);
+    try {
+      const path = "/api/table/del/" + id;
+      const response = await fetch(path);
 
-        if (response.status == 200) {
-          loadMoreData();
+      if (response.status == 200) {
+        const rowToRemove = document.getElementById(`entry_` + id); // Use the id to select the row to be removed
+        if (rowToRemove) {
+          rowToRemove.remove();
         }
-      } catch (error) {
-        console.error("Error deleting row: ", error);
       }
+    } catch (error) {
+      console.error("Error deleting row: ", error);
     }
+  }
+  document.addEventListener("DOMContentLoaded", function () {
     // update table function
     let page = 1; // Current page
     let isLoading = false; // Indicator to avoid multiple loading
@@ -97,12 +104,12 @@
 
         if (jsonData.length === 0) {
           noMoreEntries = true; // If no data returned, set the indicator to true
-          console.log("No more entries available");
           return;
         }
 
         jsonData.forEach((item) => {
           const row = document.createElement("tr");
+          row.id = `entry_${item._id}`;
           row.innerHTML = `<td>${item._id}</td>
                           <td>${item.data_inregistrarii}</td>
                           <td>${item.nr_si_data_documentului}</td>
@@ -113,7 +120,7 @@
                           <td>${item.destinatar}</td>
                           <td>${item.nr_de_inregistrare_conex_doc_indic_dos}</td>
                           <th><a href="/users/${item.user_id}"><button class="btn btn-outline-secondary">${item.user_name}</button></a></th>
-                          <td><button class="btn btn-danger" onclick="deleteRow('${item._id}')">delete <i class="far fa-trash-alt"></i></button> 
+                          <td><button class="btn btn-danger" onclick=deleteRow('${item._id}')>delete <i class="far fa-trash-alt"></i></button> 
                             <a href="/edit/${item._id}"><button class="btn btn-outline-secondary">edit <i class="feather icon-edit"></i></button></a></td>`;
           table.appendChild(row);
         });
@@ -130,7 +137,8 @@
 
     // Listen for the scroll event to detect if the user has reached the end of the page
     window.addEventListener("scroll", () => {
-      const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+      const { scrollTop, scrollHeight, clientHeight } =
+        document.documentElement;
       if (scrollTop + clientHeight >= scrollHeight - 5) {
         loadMoreData(); // If the user has reached the end of the page, load more data
       }
