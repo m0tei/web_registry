@@ -74,7 +74,7 @@
         const response = await fetch(path);
 
         if (response.status == 200) {
-          document.getElementById('entry_'+id).remove;
+          loadMoreData();
         }
       } catch (error) {
         console.error("Error deleting row: ", error);
@@ -102,8 +102,8 @@
         }
 
         jsonData.forEach((item) => {
-          const row = `<tr id="entry_${item._id}">
-                          <td>${item._id}</td>
+          const row = document.createElement("tr");
+          row.innerHTML = `<td>${item._id}</td>
                           <td>${item.data_inregistrarii}</td>
                           <td>${item.nr_si_data_documentului}</td>
                           <td>${item.de_unde_provine_documentul}</td>
@@ -114,8 +114,7 @@
                           <td>${item.nr_de_inregistrare_conex_doc_indic_dos}</td>
                           <th><a href="/users/${item.user_id}"><button class="btn btn-outline-secondary">${item.user_name}</button></a></th>
                           <td><button class="btn btn-danger" onclick="deleteRow('${item._id}')">delete <i class="far fa-trash-alt"></i></button> 
-                            <a href="/edit/${item._id}"><button class="btn btn-outline-secondary">edit <i class="feather icon-edit"></i></button></a></td>
-                          </tr>`;
+                            <a href="/edit/${item._id}"><button class="btn btn-outline-secondary">edit <i class="feather icon-edit"></i></button></a></td>`;
           table.appendChild(row);
         });
 
