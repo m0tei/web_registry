@@ -131,7 +131,10 @@
                     window.location.href = '/index';
                 } else {
                     // Handle errors here if needed
+                    var id = document.getElementById("id").value;
+                    var error = "Există deja o înregistrare cu acest număr de înregistrare! Editează intrarea: " + id;
                     document.getElementById("error").removeAttribute('hidden');
+                    document.getElementById("error").innerHTML = "<a href='/edit/" + id + "'>" + error + "</a>";
                 }
             })
             .catch(error => {
