@@ -33,7 +33,10 @@
                   </div>
                   <div class="card-block table-border-style">
                     <div class="table-responsive">
-                      <table class="table table-hover sortable">
+                      <table
+                        class="table table-hover table-sortable"
+                        id="table-full"
+                      >
                         <thead>
                           <tr>
                             <th>#</th>
@@ -71,19 +74,20 @@
 {% block javascripts %}
 <script>
   async function deleteRow(id) {
-    console.log("delete: " + id);
-    try {
-      const path = "/api/table/del/" + id;
-      const response = await fetch(path);
+    if (confirm("Esti sigur că vrei să ștergi intrarea?", )) {
+      try {
+        const path = "/api/table/del/" + id;
+        const response = await fetch(path);
 
-      if (response.status == 200) {
-        const rowToRemove = document.getElementById(`entry_` + id); // Use the id to select the row to be removed
-        if (rowToRemove) {
-          rowToRemove.remove();
+        if (response.status == 200) {
+          const rowToRemove = document.getElementById(`entry_` + id); // Use the id to select the row to be removed
+          if (rowToRemove) {
+            rowToRemove.remove();
+          }
         }
+      } catch (error) {
+        console.error("Error deleting row: ", error);
       }
-    } catch (error) {
-      console.error("Error deleting row: ", error);
     }
   }
   document.addEventListener("DOMContentLoaded", function () {
