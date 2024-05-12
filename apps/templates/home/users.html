@@ -142,9 +142,11 @@
     }
 
     async function switchstatusUser(id) {
-        const response = await fetch('/api/users/switchstatus/' + id)
+        if(confirm("Vrei să schimbi statusul userului?")){
+            const response = await fetch('/api/users/switchstatus/' + id)
         if(response.ok)
             populateUsers();
+        }
     }
 
     document.getElementById('createUser_form').addEventListener('submit', function (event) {
