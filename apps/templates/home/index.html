@@ -20,23 +20,16 @@
                 <div class="card">
                   <div class="card-header">
                     <h5>Registru intrari/iesiri</h5>
-                    <span class="d-block m-t-5"
-                      >Creaza, Sterge sau Editeaza orice intrare in
-                      registru</span
-                    >
+                    <span class="d-block m-t-5">Creaza, Sterge sau Editeaza orice intrare in
+                      registru</span>
                     <div style="padding-top: 7px"></div>
-                    <a href="/add"
-                      ><button class="btn btn-primary" href="/add.html">
+                    <a href="/add"><button class="btn btn-primary" href="/add.html">
                         Adauga
-                      </button></a
-                    >
+                      </button></a>
                   </div>
                   <div class="card-block table-border-style">
                     <div class="table-responsive">
-                      <table
-                        class="table table-hover table-sortable"
-                        id="table-full"
-                      >
+                      <table class="table table-hover table-sortable" id="table-full">
                         <thead>
                           <tr>
                             <th>#</th>
@@ -74,7 +67,7 @@
 {% block javascripts %}
 <script>
   async function deleteRow(id) {
-    if (confirm("Esti sigur că vrei să ștergi intrarea?", )) {
+    if (confirm("Esti sigur că vrei să ștergi intrarea?",)) {
       try {
         const path = "/api/table/del/" + id;
         const response = await fetch(path);
@@ -106,7 +99,8 @@
 
         const table = document.getElementById("registry_table");
 
-        if (jsonData.length === 0) {
+        if (jsonData.length != 0) {
+          page++;
           noMoreEntries = true; // If no data returned, set the indicator to true
           return;
         }
@@ -115,21 +109,21 @@
           const row = document.createElement("tr");
           row.id = `entry_${item._id}`;
           row.innerHTML = `<td>${item._id}</td>
-                          <td>${item.data_inregistrarii}</td>
-                          <td>${item.nr_si_data_documentului}</td>
-                          <td>${item.de_unde_provine_documentul}</td>
-                          <td>${item.continutul_documentului}</td>
-                          <td>${item.repartizare}</td>
-                          <td>${item.data_expedierii}</td>
-                          <td>${item.destinatar}</td>
-                          <td>${item.nr_de_inregistrare_conex_doc_indic_dos}</td>
-                          <th><a href="/users/${item.user_id}"><button class="btn btn-outline-secondary">${item.user_name}</button></a></th>
-                          <td><button class="btn btn-danger" onclick=deleteRow('${item._id}')>delete <i class="far fa-trash-alt"></i></button> 
-                            <a href="/edit/${item._id}"><button class="btn btn-outline-secondary">edit <i class="feather icon-edit"></i></button></a></td>`;
+                            <td>${item.data_inregistrarii}</td>
+                            <td>${item.nr_si_data_documentului}</td>
+                            <td>${item.de_unde_provine_documentul}</td>
+                            <td>${item.continutul_documentului}</td>
+                            <td>${item.repartizare}</td>
+                            <td>${item.data_expedierii}</td>
+                            <td>${item.destinatar}</td>
+                            <td>${item.nr_de_inregistrare_conex_doc_indic_dos}</td>
+                            <th><a href="/users/${item.user_id}"><button class="btn btn-outline-secondary">${item.user_name}</button></a></th>
+                            <td><button class="btn btn-danger" onclick=deleteRow('${item._id}')>delete <i class="far fa-trash-alt"></i></button> 
+                              <a href="/edit/${item._id}"><button class="btn btn-outline-secondary">edit <i class="feather icon-edit"></i></button></a></td>`;
           table.appendChild(row);
         });
 
-        page++; // Increment the page number
+         // Increment the page number
 
         isLoading = false; // Set the indicator to false to indicate the end of loading
       } catch (error) {
