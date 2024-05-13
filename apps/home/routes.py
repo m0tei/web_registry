@@ -3,8 +3,8 @@ import tempfile
 import uuid
 import openpyxl
 from apps.home import blueprint
-from flask import make_response, render_template, request, jsonify, send_file, session, redirect, url_for
-from flask_login import login_required, logout_user, current_user
+from flask import make_response, render_template, request, jsonify, send_file, session
+from flask_login import login_required, current_user
 from jinja2 import TemplateNotFound
 from apps.config import db
 from datetime import datetime as dt
@@ -121,6 +121,11 @@ def add():
         "destinatar": request.form.get('destinatar'),
         "nr_de_inregistrare_conex_doc_indic_dos": request.form.get('nr_inregistrare'),
     }        
+    
+    # Verificare daca data introdusa este in viitor
+    this_entry_date = dt.strptime(entry['data_inregistrarii'], '%Y-%m-%d').date()
+    if this_entry_date > datetime.date.today():
+        return jsonify({"error": "Data selectată este în viitor!"}), 400
 
     ## Verficiare data este secventiala
     smaller_elm = year_selected.find_one({"_id": {"$lt": last_id}}, sort=[("_id", -1)])
@@ -135,37 +140,31 @@ def add():
     else:
         bigger_elm_date = None
     
-    this_entry_date = dt.strptime(entry['data_inregistrarii'], '%Y-%m-%d').date()
     if last_id != 1:
-        if bigger_elm_date and this_entry_date > bigger_elm_date:
-            return jsonify({"error": "Intrarea nu este in ordine cronologica!"}), 400
-        if smaller_elm_date and this_entry_date < smaller_elm_date:
-            return jsonify({"error": "Intrarea nu este in ordine cronologica!"}), 400
+        if bigger_elm_date and this_entry_date > bigger_elm_date or smaller_elm_date and this_entry_date < smaller_elm_date:
+            return jsonify({"error": "Intrarea nu este in ordine cronologică!"}), 400
         
     # updatarea unei intararii deja existente
     existing_entry = year_selected.find_one({"_id": int(last_id)})
     if existing_entry and request.form.get('from') == "edit":
         try:
             year_selected.update_one({"_id": int(last_id)}, {"$set": entry})
-            return jsonify({"msg": "Entry updated"}), 200
+            return jsonify({"msg": "Intrarea updatată"}), 200
         except Exception as e:
             print("Error updating entry:", e)
-            return jsonify({"error": "Failed to update entry"}), 500
+            return jsonify({"error": "Errare la editare!"}), 500
         
     # Conditii de introducere a unei intrari noi
-    
-    if this_entry_date > datetime.date.today():
-        return jsonify({"error": "Aceasta intrare este in viitor!"}), 400
     if not existing_entry:
         try:
             result = year_selected.insert_one(entry)
             if result.inserted_id:
-                return jsonify({"msg":"Entry added!"}), 200
+                return jsonify({"msg":"Intrare adagata!"}), 200
         except Exception as e:
             print("Error inserting entry:", e)
-            return jsonify({"error": "Failed to insert entry"}), 500
+            return jsonify({"error": "Eroare la inserare!"}), 500
 
-    return jsonify({"error": "Already exists and you cannot edit it!"}), 405
+    return jsonify({"error": "Intrarea deja exista sau nu poate fi editata!"}), 405
 
 
 @blueprint.route('/api/table/show', methods=['GET'])
@@ -258,7 +257,7 @@ def collectionList():
             collections.remove("users")
         return jsonify(collections)
     except Exception as e:
-        return jsonify({"error": f"Error fetching collections: {e}"}),
+        return jsonify({"error": f"Eroare la incarcarea colectiilor!: {e}"}),
 
 
 @blueprint.route('/api/table/verif', methods={'GET'})
@@ -269,7 +268,7 @@ def verifyDownload():
     if verifyYear in db.list_collection_names():
         return "table found", 200
     else:
-        return jsonify({"error": "Table not found!"}), 404
+        return jsonify({"error": "Tabelul anului respectiv nu exista!"}), 404
 
 
 @blueprint.route('/api/table/download/<year>', methods=['GET'])
@@ -310,7 +309,6 @@ def download(year):
     response = make_response(send_file(temp.name, as_attachment=True))
     response.headers['Content-Disposition'] = f'attachment; filename={attachmentFilename}'
     response.status_code = 200
-    # Send the file to the client
     return response
 
 
@@ -318,30 +316,26 @@ def download(year):
 @login_required
 def getUsers():
     users = list(db.users.find({}, {'password': 0}))
+    if users == None:
+        return jsonify({"error": "Eroare la incarcarea utilizatoriilor!"}), 404
     return users, 200
 
 
 @blueprint.route('/api/users/switchstatus/<id>', methods=['GET'])
 @login_required
 def SwitchStatusUser(id):
-        if current_user._id == id:
-            return jsonify({'message': 'Cannot change current user role!'}), 400
+    if current_user._id == id:
+        return jsonify({'message': 'Cannot change current user role!'}), 400
 
-        if db.users.find_one({"_id": id})["active"] == True:
-            result = db.users.update_one(
-                {'_id': id},
-                {'$set': {'active': False}}
-            )
-        else:
-            result = db.users.update_one(
-                {'_id': id},
-                {'$set': {'active': True}}
-            )
+    result = db.users.update_one(
+        {'_id': id},
+        {'$set': {'active': False if db.users.find_one({"_id": id})["active"] else True}}
+    )
 
-        if result.modified_count == 1:
-            return jsonify({'message': 'User inactive successfully'}), 200
-        else:
-            return jsonify({'error': 'User not found'}), 404
+    if result.modified_count == 1:
+        return jsonify({'message': 'User inactive successfully'}), 200
+    else:
+        return jsonify({'error': 'User not found'}), 404
         
 
 

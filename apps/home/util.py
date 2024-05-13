@@ -8,8 +8,6 @@ import hashlib
 import binascii
 from datetime import datetime
 
-# Inspiration -> https://www.vitoshacademy.com/hashing-passwords-in-python/
-
 def format_date(input_date):
     # Parse the input date string
     parsed_date = datetime.strptime(input_date, '%Y-%m-%d')
