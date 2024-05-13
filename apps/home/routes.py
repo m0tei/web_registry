@@ -99,15 +99,17 @@ def add():
     yearSelected = dt.strptime(date_string, "%Y-%m-%d")
     year_selected = getattr(db, str(yearSelected.year), None)
 
+    # Generarea id-ului din document
+
     id_entry = request.form.get('id')
     if not id_entry:
         last_document = year_selected.find_one(sort=[("_id", pymongo.DESCENDING)])
         last_id = last_document['_id'] + 1 if last_document else 1
     else:
-        last_id = id_entry
+        last_id = int(id_entry)
 
     entry = {
-        "_id": int(last_id),
+        "_id": last_id,
         "user": session["_user_id"],
         "date": str(dt.today().date()),
         "data_inregistrarii": str(request.form.get('data')),
@@ -118,10 +120,31 @@ def add():
         "data_expedierii": str(request.form.get('data_expedierii')),
         "destinatar": request.form.get('destinatar'),
         "nr_de_inregistrare_conex_doc_indic_dos": request.form.get('nr_inregistrare'),
-    }
+    }        
 
+    ## Verficiare data este secventiala
+    smaller_elm = year_selected.find_one({"_id": {"$lt": last_id}}, sort=[("_id", -1)])
+    bigger_elm = year_selected.find_one({"_id": {"$gt": last_id}}, sort=[("_id", 1)])
+
+    if smaller_elm:
+        smaller_elm_date = dt.strptime(smaller_elm['data_inregistrarii'], '%Y-%m-%d').date()
+    else: 
+        smaller_elm_date = None
+    if bigger_elm:
+        bigger_elm_date = dt.strptime(bigger_elm['data_inregistrarii'], '%Y-%m-%d').date()
+    else:
+        bigger_elm_date = None
+    
+    this_entry_date = dt.strptime(entry['data_inregistrarii'], '%Y-%m-%d').date()
+    if last_id != 1:
+        if bigger_elm_date and this_entry_date > bigger_elm_date:
+            return jsonify({"error": "Intrarea nu este in ordine cronologica!"}), 400
+        if smaller_elm_date and this_entry_date < smaller_elm_date:
+            return jsonify({"error": "Intrarea nu este in ordine cronologica!"}), 400
+        
+    # updatarea unei intararii deja existente
     existing_entry = year_selected.find_one({"_id": int(last_id)})
-    if existing_entry and request.form.get('from') == "admin":
+    if existing_entry and request.form.get('from') == "edit":
         try:
             year_selected.update_one({"_id": int(last_id)}, {"$set": entry})
             return jsonify({"msg": "Entry updated"}), 200
@@ -129,15 +152,10 @@ def add():
             print("Error updating entry:", e)
             return jsonify({"error": "Failed to update entry"}), 500
         
-    last_year_string = year_selected.find_one(sort=[("_id", pymongo.DESCENDING)])['data_inregistrarii']
-    last_entry_date = dt.strptime(last_year_string, '%Y-%m-%d').date()
-    this_entry_date = dt.strptime(entry['data_inregistrarii'], '%Y-%m-%d').date()
-    if this_entry_date < last_entry_date:
-        return jsonify({"error": "Data intrarii este inaintea ultimei intrari din tabel!"}), 409
+    # Conditii de introducere a unei intrari noi
     
     if this_entry_date > datetime.date.today():
-        return jsonify({"error": "Aceasta intrare este in viitor!"}), 406
-
+        return jsonify({"error": "Aceasta intrare este in viitor!"}), 400
     if not existing_entry:
         try:
             result = year_selected.insert_one(entry)

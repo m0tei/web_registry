@@ -41,7 +41,7 @@
                                     </div>
                                     <div class="card-body">
                                         <form id="form_add">
-                                            <input type="text" name="from" value="user" hidden>
+                                            <input type="text" name="from" value="add" hidden>
                                             <div class="form-group">
                                                 <label for="id">Nr. de înregistrare</label>
                                                 <input type="number" id="id" name="id" class="form-control">
@@ -147,10 +147,7 @@
                             var error = "Există deja o înregistrare cu acest număr de înregistrare! Editează intrarea: " + id;
                             document.getElementById("error").removeAttribute('hidden');
                             document.getElementById("error").innerHTML = "<a href='/edit/" + id + "'>" + error + "</a>";
-                        } else if (response.status === 409) {
-                            document.getElementById("error").removeAttribute('hidden');
-                            document.getElementById("error").innerHTML = msg.error;
-                        } else if (response.status === 406) {
+                        } else if (response.status === 400) {
                             document.getElementById("error").removeAttribute('hidden');
                             document.getElementById("error").innerHTML = msg.error;
                         } else {
