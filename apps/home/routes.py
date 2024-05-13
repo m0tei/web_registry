@@ -99,9 +99,6 @@ def add():
     yearSelected = dt.strptime(date_string, "%Y-%m-%d")
     year_selected = getattr(db, str(yearSelected.year), None)
 
-    if dt.today().year < yearSelected.year:
-        return jsonify({"error": "Entry is in the future!"}), 400
-
     id_entry = request.form.get('id')
     if not id_entry:
         last_document = year_selected.find_one(sort=[("_id", pymongo.DESCENDING)])
@@ -131,17 +128,26 @@ def add():
         except Exception as e:
             print("Error updating entry:", e)
             return jsonify({"error": "Failed to update entry"}), 500
-    else:
-        if not existing_entry:
-            try:
-                result = year_selected.insert_one(entry)
-                if result.inserted_id:
-                    return jsonify({"msg":"Entry added!"}), 200
-            except Exception as e:
-                print("Error inserting entry:", e)
-                return jsonify({"error": "Failed to insert entry"}), 500
+        
+    last_year_string = year_selected.find_one(sort=[("_id", pymongo.DESCENDING)])['data_inregistrarii']
+    last_entry_date = dt.strptime(last_year_string, '%Y-%m-%d').date()
+    this_entry_date = dt.strptime(entry['data_inregistrarii'], '%Y-%m-%d').date()
+    if this_entry_date < last_entry_date:
+        return jsonify({"error": "Data intrarii este inaintea ultimei intrari din tabel!"}), 409
+    
+    if this_entry_date > datetime.date.today():
+        return jsonify({"error": "Aceasta intrare este in viitor!"}), 406
 
-    return jsonify({"error": "Already exists and you cannot edit it!"}), 400
+    if not existing_entry:
+        try:
+            result = year_selected.insert_one(entry)
+            if result.inserted_id:
+                return jsonify({"msg":"Entry added!"}), 200
+        except Exception as e:
+            print("Error inserting entry:", e)
+            return jsonify({"error": "Failed to insert entry"}), 500
+
+    return jsonify({"error": "Already exists and you cannot edit it!"}), 405
 
 
 @blueprint.route('/api/table/show', methods=['GET'])
