@@ -3,7 +3,7 @@ services:
   web_app:
     container_name: web_app
     restart: always
-    build: . # m0tei/registru_web:0.0.1
+    image: m0tei/registru_web:0.0.1
     networks:
       - db_network
     ports:
@@ -17,7 +17,7 @@ services:
   
   mongo:
     image: mongo:5.0
-    container_name: mongo
+    container_name: mongo_db
     restart: always
     networks:
       - db_network
@@ -29,7 +29,7 @@ services:
         source: db_config
         target: /data/configdb
     
-  mongo-express:
+  mongo_express:
     image: mongo-express
     container_name: mongo_express
     restart: always
@@ -38,16 +38,32 @@ services:
     ports:
       - 8081:8081
     environment:
-      - ME_CONFIG_OPTIONS_EDITORTHEME = ambiance
-      - ME_CONFIG_MONGODB_SERVER = mongo
-      - ME_CONFIG_MONGODB_ADMINUSERNAME = tpopoviciu
-      - ME_CONFIG_MONGODB_ADMINPASSWORD = tpopoviciu_db_pass
+      - ME_CONFIG_OPTIONS_EDITORTHEME=ambiance
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=tpopoviciu
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=tpopoviciu_db_pass
 
+  mongo_backup:
+    image: m0tei/mongo_backup:0.0.1
+    container_name: mongo_backup
+    restart: always
+    networks:
+      - db_network
+    volumes:
+      - type: volume
+        source: db_backup
+        target: /backup
+    environment:
+      - MONGO_DB_HOST=mongo
+      - MONGO_DB_USER=tpopoviciu
+      - MONGO_DB_PASS=tpopoviciu_db_pass
 
 volumes:
   db_data:
     driver: local
   db_config:
+    driver: local
+  db_backup:
     driver: local
   app_data:
     driver: local
