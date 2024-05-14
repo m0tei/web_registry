@@ -279,7 +279,7 @@ def download(year):
     specific_year = getattr(db, year, None)
     all_documents = specific_year.find().sort("_id", 1)
 
-    header = ["ID", "Data", "Nr. și data documentului", "De unde provine documentul", "Continut pe scurt",
+    header = ["Numar înregistrare", "Data", "Nr. și data documentului", "De unde provine documentul", "Continut pe scurt",
               "Compartiment repartzat", "Data expedierii", "Destinatar", "Nr. de inregistrare la care se conex. doc. si indic. dos."]
 
     sheet.append(header)
