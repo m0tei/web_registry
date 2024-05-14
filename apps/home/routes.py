@@ -174,7 +174,7 @@ def GetTable():
     page = int(request.args.get('page', 1))
 
     # Number of entries per page
-    per_page = 10 # You can adjust this as needed
+    per_page = 20 # You can adjust this as needed
 
     # Calculate the skip value based on the page number and number of entries per page
     skip = (page - 1) * per_page
@@ -199,7 +199,7 @@ def GetTableUser(id):
     page = int(request.args.get('page', 1))
 
     # Number of entries per page
-    per_page = 10 # You can adjust this as needed
+    per_page = 20 # You can adjust this as needed
 
     # Calculate the skip value based on the page number and number of entries per page
     skip = (page - 1) * per_page
