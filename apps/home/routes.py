@@ -189,8 +189,8 @@ def GetTable():
         entry["user_name"] = db.users.find_one({"_id": entry["user"]})["name"]
         entry["data_inregistrarii"] = format_date(entry["data_inregistrarii"])
         entry["data_expedierii"] = format_date(entry["data_expedierii"])
-
     return jsonify(entries_list), 200
+
 
 @blueprint.route('/api/table/show/<id>', methods=['GET'])
 @login_required
