@@ -56,11 +56,12 @@ services:
         source: db_backup
         target: /backup
     environment:
+      - TZ=Europe/Bucharest
       - MONGO_DB_HOST=mongo
       - MONGO_DB_USER=tpopoviciu
       - MONGO_DB_PASS=tpopoviciu_db_pass
       - MONGO_DB_NUM=5
-      - CRON_TIME=0 0 * * *
+      - CRON_TIME=* * * * *
 
 
 volumes:
