@@ -43,7 +43,7 @@ config_dict = {
 }
 
 
-MONGO_DB_HOST = os.getenv("MONGO_DB_HOST", 'localhost')
+MONGO_DB_HOST = os.getenv("MONGO_DB_HOST", 'mongo')
 MONGO_DB_USER = os.getenv("MONGO_DB_USER", "tpopoviciu")
 MONGO_DB_PASS = os.getenv("MONGO_DB_PASS", "tpopoviciu_db_pass")
 connection_string = "mongodb://"+ MONGO_DB_USER + ":"+ MONGO_DB_PASS + "@" + MONGO_DB_HOST + ":27017/admin"
