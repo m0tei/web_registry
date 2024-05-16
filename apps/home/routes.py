@@ -174,7 +174,7 @@ def GetTable():
     page = int(request.args.get('page', 1))
 
     # Number of entries per page
-    per_page = 10 # You can adjust this as needed
+    per_page = 20 # You can adjust this as needed
 
     # Calculate the skip value based on the page number and number of entries per page
     skip = (page - 1) * per_page
@@ -199,7 +199,7 @@ def GetTableUser(id):
     page = int(request.args.get('page', 1))
 
     # Number of entries per page
-    per_page = 10 # You can adjust this as needed
+    per_page = 20 # You can adjust this as needed
 
     # Calculate the skip value based on the page number and number of entries per page
     skip = (page - 1) * per_page
@@ -279,7 +279,7 @@ def download(year):
     specific_year = getattr(db, year, None)
     all_documents = specific_year.find().sort("_id", 1)
 
-    header = ["ID", "Data", "Nr. și data documentului", "De unde provine documentul", "Continut pe scurt",
+    header = ["Numar înregistrare", "Data", "Nr. și data documentului", "De unde provine documentul", "Continut pe scurt",
               "Compartiment repartzat", "Data expedierii", "Destinatar", "Nr. de inregistrare la care se conex. doc. si indic. dos."]
 
     sheet.append(header)
