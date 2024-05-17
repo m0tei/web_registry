@@ -38,7 +38,7 @@
                             <th>De unde povine documentul</th>
                             <th>Continutul documentului</th>
                             <th>Repartizare</th>
-                            <th>Data Expedierii</th>
+                            <th>Data expedierii</th>
                             <th>Destinatar</th>
                             <th>Nr. de inreg. conex. doc. indc. dos.</th>
                             <th>Adaugat de:</th>
@@ -67,13 +67,13 @@
 {% block javascripts %}
 <script>
   async function deleteRow(id) {
-    if (confirm("Esti sigur că vrei să ștergi intrarea?",)) {
+    if (confirm("Esti sigur că vrei să ștergi intrarea?")) {
       try {
         const path = "/api/table/del/" + id;
         const response = await fetch(path);
 
         if (response.status == 200) {
-          const rowToRemove = document.getElementById(`entry_` + id); // Use the id to select the row to be removed
+          const rowToRemove = document.getElementById(`entry_` + id);
           if (rowToRemove) {
             rowToRemove.remove();
           }
@@ -83,25 +83,24 @@
       }
     }
   }
-  document.addEventListener("DOMContentLoaded", function () {
-    // update table function
-    let page = 1; // Current page
-    let isLoading = false; // Indicator to avoid multiple loading
 
-    // Function for loading more data
+  document.addEventListener("DOMContentLoaded", function () {
+    let page = 1;
+    let isLoading = false;
+
     async function loadMoreData() {
-      if (isLoading) return; // If loading is already in progress, exit
-      isLoading = true; // Set the indicator to true to indicate the beginning of loading
+      if (isLoading) return;
+      isLoading = true;
 
       try {
-        const response = await fetch(`/api/table/show?page=${page}`); // Call the API with the current page number
+        const response = await fetch(`/api/table/show?page=${page}`);
         const jsonData = await response.json();
 
         const table = document.getElementById("registry_table");
 
         if (jsonData.length != 0) {
-          page++;
-          noMoreEntries = true; // If no data returned, set the indicator to true
+          // If there is more data, reload fetches but don't increment page value
+          isLoading = false;
           return;
         }
 
@@ -109,23 +108,22 @@
           const row = document.createElement("tr");
           row.id = `entry_${item._id}`;
           row.innerHTML = `<td>${item._id}</td>
-                            <td>${item.data_inregistrarii}</td>
-                            <td>${item.nr_si_data_documentului}</td>
-                            <td>${item.de_unde_provine_documentul}</td>
-                            <td>${item.continutul_documentului}</td>
-                            <td>${item.repartizare}</td>
-                            <td>${item.data_expedierii}</td>
-                            <td>${item.destinatar}</td>
-                            <td>${item.nr_de_inregistrare_conex_doc_indic_dos}</td>
-                            <th><a href="/users/${item.user_id}"><button class="btn btn-outline-secondary">${item.user_name}</button></a></th>
-                            <td><button class="btn btn-danger" onclick=deleteRow('${item._id}')>delete <i class="far fa-trash-alt"></i></button> 
-                              <a href="/edit/${item._id}"><button class="btn btn-outline-secondary">edit <i class="feather icon-edit"></i></button></a></td>`;
+                        <td>${item.data_inregistrarii}</td>
+                        <td>${item.nr_si_data_documentului}</td>
+                        <td>${item.de_unde_provine_documentul}</td>
+                        <td>${item.continutul_documentului}</td>
+                        <td>${item.repartizare}</td>
+                        <td>${item.data_expedierii}</td>
+                        <td>${item.destinatar}</td>
+                        <td>${item.nr_de_inregistrare_conex_doc_indic_dos}</td>
+                        <th><a href="/users/${item.user_id}"><button class="btn btn-outline-secondary">${item.user_name}</button></a></th>
+                        <td><button class="btn btn-danger" onclick=deleteRow('${item._id}')>delete <i class="far fa-trash-alt"></i></button> 
+                          <a href="/edit/${item._id}"><button class="btn btn-outline-secondary">edit <i class="feather icon-edit"></i></button></a></td>`;
           table.appendChild(row);
         });
 
-         // Increment the page number
-
-        isLoading = false; // Set the indicator to false to indicate the end of loading
+        page++; // Increment the page number
+        isLoading = false;
       } catch (error) {
         console.error("Error fetching more data:", error);
       }
@@ -133,12 +131,10 @@
 
     loadMoreData();
 
-    // Listen for the scroll event to detect if the user has reached the end of the page
     window.addEventListener("scroll", () => {
-      const { scrollTop, scrollHeight, clientHeight } =
-        document.documentElement;
+      const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
       if (scrollTop + clientHeight >= scrollHeight - 5) {
-        loadMoreData(); // If the user has reached the end of the page, load more data
+        loadMoreData();
       }
     });
   });
