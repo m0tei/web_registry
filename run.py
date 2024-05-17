@@ -10,6 +10,8 @@ from   sys import exit
 from apps.config import config_dict
 from apps import create_app
 
+from apps import socketio
+
 # WARNING: Don't run with debug turned on in production!
 DEBUG = (os.getenv('DEBUG', 'False') == 'True')
 
@@ -36,4 +38,4 @@ if DEBUG:
     app.logger.info('ASSETS_ROOT      = ' + app_config.ASSETS_ROOT )
 
 if __name__ == "__main__":
-    app.run()
+    socketio.run(app)

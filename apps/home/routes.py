@@ -12,6 +12,8 @@ from apps.home.util import format_date, format_reverse_date
 import datetime
 import pymongo
 
+from apps import socketio
+
 
 @blueprint.route('/index')
 @login_required
@@ -158,6 +160,10 @@ def add():
     if not existing_entry:
         try:
             result = year_selected.insert_one(entry)
+
+            
+            socketio.emit("entry_add", entry)
+
             if result.inserted_id:
                 return jsonify({"msg":"Intrare adagata!"}), 200
         except Exception as e:
@@ -214,7 +220,6 @@ def GetTableUser(id):
         entry["user_name"] = db.users.find_one({"_id": entry["user"]})["name"]
         entry["data_inregistrarii"] = format_date(entry["data_inregistrarii"])
         entry["data_expedierii"] = format_date(entry["data_expedierii"])
-    
     return jsonify(entries_list), 200
 
 
@@ -240,6 +245,7 @@ def DeleteRow(id):
     response = this_year_db.delete_one({'_id': int(id)})
 
     if response.deleted_count == 1:
+        socketio.emit("entry_delete", id)
         return jsonify({'message': 'Entry deleted successfully'}), 200
     else:
         return jsonify({'error': 'Entry not found'}), 404

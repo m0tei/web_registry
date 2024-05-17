@@ -20,16 +20,31 @@
                 <div class="card">
                   <div class="card-header">
                     <h5>Registru intrari/iesiri</h5>
-                    <span class="d-block m-t-5">Creaza, Sterge sau Editeaza orice intrare in
-                      registru</span>
+                    <span class="d-block m-t-5"
+                      >Creaza, Sterge sau Editeaza orice intrare in
+                      registru</span
+                    >
                     <div style="padding-top: 7px"></div>
-                    <a href="/add"><button class="btn btn-primary" href="/add.html">
+                    <a href="/add"
+                      ><button class="btn btn-primary" href="/add.html">
                         Adauga
-                      </button></a>
+                      </button></a
+                    >
+                    <div
+                      id="error"
+                      class="alert alert-danger"
+                      role="alert"
+                      hidden
+                    >
+                      Există deja o înregistrare cu acest număr de înregistrare!
+                    </div>
                   </div>
                   <div class="card-block table-border-style">
                     <div class="table-responsive">
-                      <table class="table table-hover table-sortable" id="table-full">
+                      <table
+                        class="table table-hover table-sortable"
+                        id="table-full"
+                      >
                         <thead>
                           <tr>
                             <th>#</th>
@@ -66,8 +81,22 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
+  var socket = io();
+
+  socket.on("entry_delete", function (data) {
+    const rowToRemove = document.getElementById(`entry_` + data); // Use the id to select the row to be removed
+    if (rowToRemove) {
+      rowToRemove.remove();
+    }
+    console.log("Stergere intrare: ", data);
+  });
+
+  socket.on("entry_add", function (data) {
+    window.location.reload();
+  });
+
   async function deleteRow(id) {
-    if (confirm("Esti sigur că vrei să ștergi intrarea?",)) {
+    if (confirm("Esti sigur că vrei să ștergi intrarea?")) {
       try {
         const path = "/api/table/del/" + id;
         const response = await fetch(path);
@@ -77,36 +106,43 @@
           if (rowToRemove) {
             rowToRemove.remove();
           }
+        } else {
+          document.getElementById("error").removeAttribute("hidden");
+          document.getElementById("error").innerHTML =
+            "Intrarea nu mai exista! Dă reload la pagina!";
         }
       } catch (error) {
-        console.error("Error deleting row: ", error);
+        console.error("Eroare stergere rand: ", error);
       }
     }
-  } 
-  document.addEventListener("DOMContentLoaded", function () {
-    // update table function
-    let page = 1; // Current page
-    let isLoading = false; // Indicator to avoid multiple loading
+  }
 
-    // Function for loading more data
-    async function loadMoreData() {
-      if (isLoading) return; // If loading is already in progress, exit
-      isLoading = true; // Set the indicator to true to indicate the beginning of loading
+  document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+      // update table function
+      let page = 1; // Current page
+      let isLoading = false; // Indicator to avoid multiple loading
 
-      try {
-        const response = await fetch(`/api/table/show?page=${page}`); // Call the API with the current page number
-        const jsonData = await response.json();
+      // Function for loading more data
+      async function loadMoreData() {
+        if (isLoading) return; // If loading is already in progress, exit
+        isLoading = true; // Set the indicator to true to indicate the beginning of loading
 
-        const table = document.getElementById("registry_table");
+        try {
+          const response = await fetch(`/api/table/show?page=${page}`); // Call the API with the current page number
+          const jsonData = await response.json();
 
-        if (jsonData.length === 0) {
-          return;
-        }
-        
-        jsonData.forEach((item) => {
-          const row = document.createElement("tr");
-          row.id = `entry_${item._id}`;
-          row.innerHTML = `<td>${item._id}</td>
+          const table = document.getElementById("registry_table");
+
+          if (jsonData.length === 0) {
+            return;
+          }
+
+          jsonData.forEach((item) => {
+            const row = document.createElement("tr");
+            row.id = `entry_${item._id}`;
+            row.innerHTML = `<td>${item._id}</td>
                             <td>${item.data_inregistrarii}</td>
                             <td>${item.nr_si_data_documentului}</td>
                             <td>${item.de_unde_provine_documentul}</td>
@@ -116,29 +152,35 @@
                             <td>${item.destinatar}</td>
                             <td>${item.nr_de_inregistrare_conex_doc_indic_dos}</td>
                             <th><a href="/users/${item.user_id}"><button class="btn btn-outline-secondary">${item.user_name}</button></a></th>
-                            <td><button class="btn btn-danger" onclick=deleteRow('${item._id}')>delete <i class="far fa-trash-alt"></i></button> 
+                            <td><button class="btn btn-danger" onclick=deleteRow('${item._id}')>delete <i class="far fa-trash-alt"></i></button>
                               <a href="/edit/${item._id}"><button class="btn btn-outline-secondary">edit <i class="feather icon-edit"></i></button></a></td>`;
-          table.appendChild(row);
-        });
+            table.appendChild(row);
+          });
 
-         // Increment the page number
-        page++;
-        isLoading = false; // Set the indicator to false to indicate the end of loading
-      } catch (error) {
-        console.error("Error fetching more data:", error);
+          // Increment the page number
+          page++;
+          isLoading = false; // Set the indicator to false to indicate the end of loading
+        } catch (error) {
+          console.error("Error fetching more data:", error);
+        }
       }
-    }
 
-    loadMoreData();
+      loadMoreData();
 
-    // Listen for the scroll event to detect if the user has reached the end of the page
-    window.addEventListener("scroll", () => {
-      const { scrollTop, scrollHeight, clientHeight } =
-        document.documentElement;
-      if (scrollTop + clientHeight >= scrollHeight - 5) {
-        loadMoreData(); // If the user has reached the end of the page, load more data
-      }
-    }, { passive: false });
-  }, { passive: false });
+      // Listen for the scroll event to detect if the user has reached the end of the page
+      window.addEventListener(
+        "scroll",
+        () => {
+          const { scrollTop, scrollHeight, clientHeight } =
+            document.documentElement;
+          if (scrollTop + clientHeight >= scrollHeight - 5) {
+            loadMoreData(); // If the user has reached the end of the page, load more data
+          }
+        },
+        { passive: false }
+      );
+    },
+    { passive: false }
+  );
 </script>
 {% endblock javascripts %}
