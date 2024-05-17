@@ -41,7 +41,7 @@ services:
       - 8081:8081
     environment:
       - ME_CONFIG_OPTIONS_EDITORTHEME=ambiance
-      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_SERVER=mongo_db
       - ME_CONFIG_MONGODB_ADMINUSERNAME=tpopoviciu
       - ME_CONFIG_MONGODB_ADMINPASSWORD=tpopoviciu_db_pass
 
@@ -57,7 +57,7 @@ services:
         target: /backup
     environment:
       - TZ=Europe/Bucharest
-      - MONGO_DB_HOST=mongo
+      - MONGO_DB_HOST=mongo_db
       - MONGO_DB_USER=tpopoviciu
       - MONGO_DB_PASS=tpopoviciu_db_pass
       - MONGO_DB_NUM=5
