@@ -138,7 +138,7 @@
       if (scrollTop + clientHeight >= scrollHeight - 5) {
         loadMoreData(); // If the user has reached the end of the page, load more data
       }
-    });
-  });
+    }, { passive: false });
+  }, { passive: false });
 </script>
 {% endblock javascripts %}
