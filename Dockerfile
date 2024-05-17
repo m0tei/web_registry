@@ -29,4 +29,5 @@ EXPOSE 5000
 COPY . .
 
 # gunicorn
-CMD ["gunicorn", "--config", "gunicorn-cfg.py","--preload", "run:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "-w", "1", "--access-logfile", "-", "--log-level", "debug", "--capture-output", "--enable-stdio-inheritance", "-k", "eventlet", "run:app"]
+
