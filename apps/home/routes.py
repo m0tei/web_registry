@@ -3,7 +3,7 @@ import tempfile
 import uuid
 import openpyxl
 from apps.home import blueprint
-from flask import make_response, render_template, request, jsonify, send_file, session
+from flask import make_response, render_template, request, jsonify, send_file, session, redirect, url_for
 from flask_login import login_required, current_user
 from jinja2 import TemplateNotFound
 from apps.config import db
@@ -21,6 +21,8 @@ def index():
     user = db.users.find_one({'_id': session['_user_id']})
     if user['role'] == "user":
          return render_template('home/user.html', segment='user')
+    if user['active'] == False:
+        return redirect(url_for('authentication_blueprint.login')) 
     return render_template('home/index.html', segment='index')
 
 
@@ -30,6 +32,8 @@ def user():
     user = db.users.find_one({'_id': session['_user_id']})
     if user['role'] == "admin":
          return render_template('home/index.html', segment='index')
+    if user['active'] == False:
+        return redirect(url_for('authentication_blueprint.login')) 
     return render_template('home/user.html', segment='user')
 
 @blueprint.route('/edit/<int:id>')
@@ -38,6 +42,8 @@ def edit(id):
     user = db.users.find_one({'_id':session['_user_id']})
     if user['role'] == "user":
          return render_template('home/user.html', segment='user')
+    if user['active'] == False:
+        return redirect(url_for('authentication_blueprint.login')) 
     
     entry = this_year_db.find_one({"_id": id})
     if entry is None:
@@ -51,13 +57,14 @@ def users(id):
     user = db.users.find_one({'_id':session['_user_id']})
     if user['role'] == "user":
          return render_template('home/user.html', segment='user')
+    if user['active'] == False:
+        return redirect(url_for('authentication_blueprint.login')) 
 
-    if db.users.find_one({"_id": id}):
-        user_data = db.users.find_one({"_id": id})
-    else:
-        user_data["name"] =  "user deleted!"
-        user_data["_id"] = "0"
-    return render_template('home/userPage.html', user=user_data)
+    user_id =  db.users.find_one({'_id': id})
+    if not user_id:
+        user_id["name"] =  "user deleted!"
+        user_id["_id"] = "0"
+    return render_template('home/userPage.html', user=user_id)
 
 
 
@@ -68,6 +75,8 @@ def route_template(template):
         user = db.users.find_one({'_id':session['_user_id']})
         if user['role'] == "user":
             return render_template('home/user.html', segment='user')
+        if user['active'] == False:
+            return redirect(url_for('authentication_blueprint.login')) 
     try:
 
         if not template.endswith('.html'):
@@ -150,6 +159,7 @@ def add():
     existing_entry = year_selected.find_one({"_id": int(last_id)})
     if existing_entry and request.form.get('from') == "edit":
         try:
+            socketio.emit("entry_update", entry)
             year_selected.update_one({"_id": int(last_id)}, {"$set": entry})
             return jsonify({"msg": "Intrarea updatată"}), 200
         except Exception as e:
