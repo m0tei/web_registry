@@ -47,5 +47,5 @@ MONGO_DB_USER = os.getenv("MONGO_DB_USER", "tpopoviciu")
 MONGO_DB_PASS = os.getenv("MONGO_DB_PASS", "tpopoviciu_db_pass")
 connection_string = "mongodb://"+ MONGO_DB_USER + ":"+ MONGO_DB_PASS + "@" + MONGO_DB_HOST + ":27017/admin"
 
-client = pymongo.MongoClient("localhost", 27017)
+client = pymongo.MongoClient(connection_string)
 db = client.databasePopoviciu

@@ -7,12 +7,12 @@
   table#table-full tr.fade-out {
     background-color: #ffcccc; /* Light red background color */
   }
+  table#table-full tr.updated {
+    background-color: #ccffcc; /* Light green background color */
+  }
 </style>
-{% endblock stylesheets %}
-
-{% block content %}
+{% endblock stylesheets %} {% block content %}
 <!-- [ Main Content ] start -->
-
 
 <div class="pcoded-main-container">
   <div class="pcoded-wrapper">
@@ -107,12 +107,44 @@
     location.reload();
   });
 
+  socket.on("entry_updated", function (data) {
+    // Find the row with the matching ID
+    var $entryToUpdate = $("#entry_" + data._id);
+    if ($entryToUpdate.length > 0) {
+      // Update the HTML of the found row with the new data
+      $entryToUpdate.html(`
+      <td>${data._id}</td>
+      <td>${data.data_inregistrarii}</td>
+      <td>${data.nr_si_data_documentului}</td>
+      <td>${data.de_unde_provine_documentul}</td>
+      <td>${data.continutul_documentului}</td>
+      <td>${data.repartizare}</td>
+      <td>${data.data_expedierii}</td>
+      <td>${data.destinatar}</td>
+      <td>${data.nr_de_inregistrare_conex_doc_indic_dos}</td>
+      <td><a href="/users/${data.user_id}"><button class="btn btn-outline-secondary">${data.user_name}</button></a></td>
+      <td>
+        <button class="btn btn-danger" onclick="deleteRow('${data._id}')">delete <i class="far fa-trash-alt"></i></button>
+        <a href="/edit/${data._id}"><button class="btn btn-outline-secondary">edit <i class="feather icon-edit"></i></button></a>
+      </td>
+    `);
+
+      $entryToUpdate.addClass("updated");
+
+      // Remove the green background class after 1 second
+      setTimeout(function () {
+        $entryToUpdate.removeClass("updated");
+      }, 1000);
+    }
+  });
+
   function deleteRow(id) {
     if (confirm("Esti sigur că vrei să ștergi intrarea?")) {
       $.ajax({
         url: "/api/table/del/" + id,
         method: "DELETE",
         success: function (response) {
+          $("#entry_" + id).addClass("fade-out");
           $("#entry_" + id).fadeOut(1000, function () {
             $(this).remove();
           });
@@ -136,7 +168,7 @@
 
       $.getJSON(`/api/table/show?page=${page}`, function (jsonData) {
         if (jsonData.length === 0) return;
-
+        
         jsonData.forEach(function (item) {
           $("#registry_table").append(
             `<tr id="entry_${item._id}">

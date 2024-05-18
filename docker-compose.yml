@@ -45,12 +45,6 @@ services:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=tpopoviciu
       - ME_CONFIG_MONGODB_ADMINPASSWORD=tpopoviciu_db_pass
 
-  redis:
-    image: "redis:alpine"
-    container_name: redis
-    ports:
-      - "6379:6379"
-
   mongo_backup:
     image: m0tei/mongo_backup:0.0.2
     container_name: mongo_backup

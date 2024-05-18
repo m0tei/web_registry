@@ -159,9 +159,16 @@ def add():
     existing_entry = year_selected.find_one({"_id": int(last_id)})
     if existing_entry and request.form.get('from') == "edit":
         try:
-            socketio.emit("entry_update", entry)
+            
             year_selected.update_one({"_id": int(last_id)}, {"$set": entry})
-            return jsonify({"msg": "Intrarea updatată"}), 200
+
+            entry["user_id"] = entry["user"]
+            entry["user_name"] = db.users.find_one({"_id": entry['user']})['name']
+            entry["data_inregistrarii"] = format_date(entry['data_inregistrarii'])
+            entry["data_expedierii"] = format_date(entry['data_expedierii'])
+            del entry['user']
+            socketio.emit("entry_updated", entry)
+            return jsonify({"msg": "Intrarea updatată!"}), 200
         except Exception as e:
             print("Error updating entry:", e)
             return jsonify({"error": "Errare la editare!"}), 500
@@ -170,10 +177,7 @@ def add():
     if not existing_entry:
         try:
             result = year_selected.insert_one(entry)
-
-            
             socketio.emit("entry_add", entry)
-
             if result.inserted_id:
                 return jsonify({"msg":"Intrare adagata!"}), 200
         except Exception as e:
@@ -205,6 +209,7 @@ def GetTable():
         entry["user_name"] = db.users.find_one({"_id": entry["user"]})["name"]
         entry["data_inregistrarii"] = format_date(entry["data_inregistrarii"])
         entry["data_expedierii"] = format_date(entry["data_expedierii"])
+        del entry['user']
     return jsonify(entries_list), 200
 
 
@@ -230,6 +235,7 @@ def GetTableUser(id):
         entry["user_name"] = db.users.find_one({"_id": entry["user"]})["name"]
         entry["data_inregistrarii"] = format_date(entry["data_inregistrarii"])
         entry["data_expedierii"] = format_date(entry["data_expedierii"])
+        del entry['user']
     return jsonify(entries_list), 200
 
 
@@ -321,7 +327,7 @@ def download(year):
         # Get the absolute path of the temporary file
         temp_path = temp.name
 
-    attachmentFilename = f"{today_date}_registru__{year}.xlsx"
+    attachmentFilename = f"{today_date}__registru_{year}.xlsx"
     response = make_response(send_file(temp.name, as_attachment=True))
     response.headers['Content-Disposition'] = f'attachment; filename={attachmentFilename}'
     response.status_code = 200
