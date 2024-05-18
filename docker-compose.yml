@@ -1,4 +1,4 @@
-version: '3'
+version: '3.9'
 services:
   web_app:
     container_name: web_app
@@ -44,6 +44,12 @@ services:
       - ME_CONFIG_MONGODB_SERVER=mongo_db
       - ME_CONFIG_MONGODB_ADMINUSERNAME=tpopoviciu
       - ME_CONFIG_MONGODB_ADMINPASSWORD=tpopoviciu_db_pass
+
+  redis:
+    image: "redis:alpine"
+    container_name: redis
+    ports:
+      - "6379:6379"
 
   mongo_backup:
     image: m0tei/mongo_backup:0.0.2

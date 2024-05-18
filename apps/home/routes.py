@@ -239,7 +239,7 @@ def next_element():
         return jsonify({"error": "Error giving last element"}), 400
 
 
-@blueprint.route('/api/table/del/<id>', methods=['GET'])
+@blueprint.route('/api/table/del/<id>', methods=['DELETE'])
 @login_required
 def DeleteRow(id):
     response = this_year_db.delete_one({'_id': int(id)})

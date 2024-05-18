@@ -42,7 +42,6 @@ config_dict = {
     'Debug': DebugConfig
 }
 
-
 MONGO_DB_HOST = os.getenv("MONGO_DB_HOST", 'mongo_db')
 MONGO_DB_USER = os.getenv("MONGO_DB_USER", "tpopoviciu")
 MONGO_DB_PASS = os.getenv("MONGO_DB_PASS", "tpopoviciu_db_pass")
