@@ -1,4 +1,4 @@
-FROM python:3.9-slim-bullseye
+FROM arm64v8/ubuntu:20.04
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -7,6 +7,14 @@ ENV FLASK_APP run.py
 ENV DEBUG False
 
 WORKDIR /app
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    python3 \
+    python3-pip \
+    python3-venv \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 ARG UID=10001
 RUN adduser \
