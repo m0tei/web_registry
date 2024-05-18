@@ -1,4 +1,4 @@
-FROM arm64v8/ubuntu:20.04
+FROM ubuntu:20.04
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
