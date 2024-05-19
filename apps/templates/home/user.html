@@ -82,6 +82,12 @@
 </div>
 
 <script>
+    var socket = io();
+
+    socket.on("entry_add", function () {
+        CurentDateForm();
+    });
+
     document.getElementById('form_add').addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent the default form submission
 
