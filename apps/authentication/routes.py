@@ -49,8 +49,6 @@ def login():
         }
         user=User(user_data)
 
-
-
         # Check the password
         if verify_pass(password, user.get_pass()):
             if user_data['active'] == False:
