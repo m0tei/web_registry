@@ -19,11 +19,8 @@ Flask-Migrate==4.0.4
 Flask-Minify==0.37
 flask-restx==1.1.0
 Flask-SocketIO==5.3.6
-Flask-Sockets==0.2.1
 Flask-SQLAlchemy==3.0.5
 Flask-WTF==1.2.1
-greenlet==3.0.3
-gunicorn==22.0.0
 h11==0.14.0
 htmlmin==0.1.12
 idna==3.6
