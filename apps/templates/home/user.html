@@ -85,7 +85,7 @@
     var socket = io();
 
     socket.on("entry_add", function () {
-        CurentDateForm();
+        GetIdNumber();
     });
 
     document.getElementById('form_add').addEventListener('submit', function (event) {
@@ -116,21 +116,24 @@
             });
     });
 
-    fetch('/api/table/next')
-        .then(response => {
+    function GetIdNumber(){
+        fetch('/api/table/next')
+            .then(response => {
             // Check if the response is OK (status 200)
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Once JSON data is fetched, do something with it
+                document.getElementById('id').value = data;
+            })
+            .catch(error => {
+                console.error('There was a problem with your fetch operation:', error);
             }
-            return response.json();
-        })
-        .then(data => {
-            // Once JSON data is fetched, do something with it
-            document.getElementById('id').value = data;
-        })
-        .catch(error => {
-            console.error('There was a problem with your fetch operation:', error);
-        });
+        );
+    }
 
     function CurentDateForm(){
         var currentDate = new Date();
@@ -143,6 +146,8 @@
         document.getElementById('date_input_1').value = formattedDate;
         document.getElementById('date_input_2').value = formattedDate;
     }
+
+    GetIdNumber();
     CurentDateForm();
 </script>
 
