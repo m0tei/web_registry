@@ -18,32 +18,29 @@ from apps import socketio
 @blueprint.route('/index')
 @login_required
 def index():
-    user = db.users.find_one({'_id': session['_user_id']})
-    if user['role'] == "user":
-         return render_template('home/user.html', segment='user')
-    if user['active'] == False:
-        return redirect(url_for('authentication_blueprint.login')) 
+    if current_user.role == "user":
+        return render_template('home/user.html', segment='user')
+    if not current_user.active:
+        return redirect(url_for('authentication_blueprint.login'))
     return render_template('home/index.html', segment='index')
 
 
 @blueprint.route('/user')
 @login_required
 def user():
-    user = db.users.find_one({'_id': session['_user_id']})
-    if user['role'] == "admin":
-         return render_template('home/index.html', segment='index')
-    if user['active'] == False:
-        return redirect(url_for('authentication_blueprint.login')) 
+    if current_user.role == "admin":
+        return render_template('home/index.html', segment='index')
+    if not current_user.active:
+        return redirect(url_for('authentication_blueprint.login'))
     return render_template('home/user.html', segment='user')
 
 @blueprint.route('/edit/<int:id>')
 @login_required
 def edit(id):
-    user = db.users.find_one({'_id':session['_user_id']})
-    if user['role'] == "user":
-         return render_template('home/user.html', segment='user')
-    if user['active'] == False:
-        return redirect(url_for('authentication_blueprint.login')) 
+    if current_user.role == "user":
+        return render_template('home/user.html', segment='user')
+    if not current_user.active:
+        return redirect(url_for('authentication_blueprint.login'))
     
     entry = this_year_db.find_one({"_id": id})
     if entry is None:
@@ -54,11 +51,10 @@ def edit(id):
 @blueprint.route('/users/<id>')
 @login_required
 def users(id):
-    user = db.users.find_one({'_id':session['_user_id']})
-    if user['role'] == "user":
-         return render_template('home/user.html', segment='user')
-    if user['active'] == False:
-        return redirect(url_for('authentication_blueprint.login')) 
+    if current_user.role == "user":
+        return render_template('home/user.html', segment='user')
+    if not current_user.active:
+        return redirect(url_for('authentication_blueprint.login'))
 
     user_id =  db.users.find_one({'_id': id})
     if not user_id:
@@ -71,12 +67,10 @@ def users(id):
 @blueprint.route('/<template>')
 @login_required
 def route_template(template):
-    if '_user_id' in session:
-        user = db.users.find_one({'_id':session['_user_id']})
-        if user['role'] == "user":
-            return render_template('home/user.html', segment='user')
-        if user['active'] == False:
-            return redirect(url_for('authentication_blueprint.login')) 
+    if current_user.role == "user":
+        return render_template('home/user.html', segment='user')
+    if not current_user.active:
+        return redirect(url_for('authentication_blueprint.login'))
     try:
 
         if not template.endswith('.html'):
@@ -121,7 +115,7 @@ def add():
 
     entry = {
         "_id": last_id,
-        "user": session["_user_id"],
+        "user": current_user._id,
         "date": str(dt.today().date()),
         "data_inregistrarii": str(request.form.get('data')),
         "nr_si_data_documentului": request.form.get('nr_si_data'),

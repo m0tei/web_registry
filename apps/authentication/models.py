@@ -9,7 +9,7 @@ class User(UserMixin):
         self.email = user_data["email"]
         self.password = user_data["password"]
         self.role = user_data["role"]
-        self.status = user_data["active"]
+        self.active = user_data["active"]
 
     @staticmethod
     def is_authenticated():
