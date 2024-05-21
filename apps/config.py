@@ -9,6 +9,10 @@ import string
 import pymongo
 import os
 
+MONGO_DB_HOST = os.getenv("MONGO_DB_HOST", 'mongo_db')
+MONGO_DB_USER = os.getenv("MONGO_DB_USER", "tpopoviciu")
+MONGO_DB_PASS = os.getenv("MONGO_DB_PASS", "tpopoviciu_db_pass")
+connection_string = "mongodb://"+ MONGO_DB_USER + ":"+ MONGO_DB_PASS + "@" + MONGO_DB_HOST + ":27017/admin"
 
 class Config(object):
 
@@ -33,6 +37,7 @@ class ProductionConfig(Config):
     REMEMBER_COOKIE_DURATION = 3600
 
 
+
 class DebugConfig(Config):
     DEBUG = True
 
@@ -41,11 +46,6 @@ config_dict = {
     'Production': ProductionConfig,
     'Debug': DebugConfig
 }
-
-MONGO_DB_HOST = os.getenv("MONGO_DB_HOST", 'mongo_db')
-MONGO_DB_USER = os.getenv("MONGO_DB_USER", "tpopoviciu")
-MONGO_DB_PASS = os.getenv("MONGO_DB_PASS", "tpopoviciu_db_pass")
-connection_string = "mongodb://"+ MONGO_DB_USER + ":"+ MONGO_DB_PASS + "@" + MONGO_DB_HOST + ":27017/admin"
 
 client = pymongo.MongoClient(connection_string)
 db = client.databasePopoviciu
