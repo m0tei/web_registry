@@ -54,13 +54,17 @@ services:
       - type: volume
         source: db_backup
         target: /backup
+      - type: volume
+        source: db_backup_config
+        target: /data/configdb
+        
     environment:
       - TZ=Europe/Bucharest
       - MONGO_DB_HOST=mongo_db
       - MONGO_DB_USER=tpopoviciu
       - MONGO_DB_PASS=tpopoviciu_db_pass
       - MONGO_DB_NUM=5
-      - CRON_TIME=* * * * *
+      - CRON_TIME=0 0 * * *
 
 
 volumes:
@@ -69,6 +73,8 @@ volumes:
   db_config:
     driver: local
   db_backup:
+    driver: local
+  db_backup_config:
     driver: local
   app_data:
     driver: local
