@@ -6,13 +6,10 @@
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
 
 ## About
 
-This is an online Web Registry app that keeps track of regitries added by users
+This is an online Web Registry app that keeps track of regitries added by users, making it easier for school to manage registries
 
 ## Features
 
