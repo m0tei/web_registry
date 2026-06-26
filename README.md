@@ -131,6 +131,58 @@ web_registry/
 
 ---
 
+## CI/CD
+
+Two GitHub Actions workflows handle automated testing and deployment.
+
+### `ci.yml` — runs on every push / PR
+
+| Step | What it does |
+|---|---|
+| **Lint** | Runs `flake8` over `apps/` and `run.py` (max line length 120) |
+| **Build** | Builds the Docker image to catch any build errors (no push) |
+
+### `cd.yml` — runs on push to `master` only
+
+| Step | What it does |
+|---|---|
+| **Publish** | Builds and pushes the image to Docker Hub with `latest`, a short SHA tag, and a semver tag if a git tag is present |
+| **Deploy** | SSHs into the production server and runs `docker compose pull` + `docker compose up -d` |
+
+### Required secrets & variables
+
+Set these in your GitHub repository settings under **Settings → Secrets and variables**:
+
+**Secrets** (`Settings → Secrets → Actions`):
+
+| Name | Description |
+|---|---|
+| `DOCKERHUB_USERNAME` | Docker Hub username |
+| `DOCKERHUB_TOKEN` | Docker Hub access token (not your password) |
+| `DEPLOY_HOST` | Production server IP or hostname |
+| `DEPLOY_USER` | SSH user on the production server |
+| `DEPLOY_SSH_KEY` | Private SSH key for the deploy user |
+| `DEPLOY_PATH` | Absolute path to the `docker-compose.yml` on the server |
+
+**Variables** (`Settings → Variables → Actions`):
+
+| Name | Description |
+|---|---|
+| `DOCKER_IMAGE` | Full image name, e.g. `m0tei/registru_web` |
+
+### Versioned releases
+
+Tag a commit to publish a versioned image alongside `latest`:
+
+```bash
+git tag v1.2.0
+git push origin v1.2.0
+```
+
+This triggers the CD workflow and produces `m0tei/registru_web:1.2.0` in addition to `latest`.
+
+---
+
 ## Backup
 
 The `mongo_backup` container runs a daily snapshot at midnight (Romania time) and keeps the last 5 backups. Configure via environment variables:
